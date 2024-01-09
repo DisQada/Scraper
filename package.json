@@ -1,0 +1,66 @@
+{
+  "displayName": "Scrapper",
+  "name": "@disqada/scrapper",
+  "version": "0.0.0",
+  "description": "Very simple and easy to use web scrapper",
+  "scripts": {
+    "download": "node ./bin/download.js",
+    "config": "npm explore @disqada/typedoc -- npm run config",
+    "types": "npm explore @disqada/typedoc -- npm run types",
+    "docs": "npm explore @disqada/typedoc -- npm run docs",
+    "lint": "eslint . --fix --ignore-path .gitignore",
+    "format": "prettier . --write --ignore-path .gitignore",
+    "test": "npx jest"
+  },
+  "type": "commonjs",
+  "main": "./src/exports.js",
+  "types": "./types/exports.d.ts",
+  "exports": {
+    ".": {
+      "require": "./src/exports.js",
+      "default": "./src/exports.js",
+      "types": "./types/exports.d.ts"
+    }
+  },
+  "files": [
+    "bin",
+    "src",
+    "types",
+    "*.md",
+    "*.txt"
+  ],
+  "homepage": "https://disqada.github.io/Scrapper",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DisQada/Scrapper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DisQada/Scrapper/issues"
+  },
+  "keywords": [
+    "web",
+    "scrape",
+    "scrapper",
+    "web scrapper"
+  ],
+  "author": {
+    "name": "The Alpha",
+    "email": "contact@nabilalsaiad.com",
+    "url": "https://links.nabilalsaiad.com"
+  },
+  "contributors": [],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "himalaya": "^1.1.0"
+  },
+  "devDependencies": {
+    "@disqada/typedoc": "^1.3.2",
+    "@types/jest": "*",
+    "eslint": "*",
+    "eslint-plugin-import": "*",
+    "eslint-plugin-jest": "*",
+    "eslint-plugin-jsdoc": "*",
+    "eslint-plugin-promise": "*",
+    "prettier": "*"
+  }
+}

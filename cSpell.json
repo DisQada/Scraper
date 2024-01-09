@@ -1,0 +1,7 @@
+{
+  "caseSensitive": true,
+  "useGitignore": true,
+  "language": "en-GB",
+  "files": ["./src/**/*", "./tests/**/*", "README.md"],
+  "words": ["disqada", "himalaya", "Qada", "sel"]
+}

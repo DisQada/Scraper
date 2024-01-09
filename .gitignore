@@ -1,0 +1,7 @@
+# Dependency directories
+node_modules/
+
+# Generated output
+types/
+docs/
+scrap/
