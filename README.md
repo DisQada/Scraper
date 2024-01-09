@@ -1,19 +1,19 @@
-# Scrapper
+# Scraper
 
 ## Badges
 
-[![github](https://img.shields.io/badge/DisQada/Scrapper-000000?logo=github&logoColor=white)](https://www.github.com/DisQada/Scrapper)
-[![npm](https://img.shields.io/badge/@disqada/scrapper-CB3837?logo=npm&logoColor=white)](https://www.npmjs.com/package/@disqada/scrapper)
+[![github](https://img.shields.io/badge/DisQada/Scraper-000000?logo=github&logoColor=white)](https://www.github.com/DisQada/Scraper)
+[![npm](https://img.shields.io/badge/@disqada/scraper-CB3837?logo=npm&logoColor=white)](https://www.npmjs.com/package/@disqada/scraper)
 
-![version](https://img.shields.io/npm/v/@disqada/scrapper.svg?label=latest&logo=npm)
-![monthly downloads](https://img.shields.io/npm/dm/@disqada/scrapper.svg?logo=npm)
+![version](https://img.shields.io/npm/v/@disqada/scraper.svg?label=latest&logo=npm)
+![monthly downloads](https://img.shields.io/npm/dm/@disqada/scraper.svg?logo=npm)
 
-[![Test](https://github.com/DisQada/Scrapper/actions/workflows/test.yml/badge.svg)](https://github.com/DisQada/Scrapper/actions/workflows/test.yml)
+[![Test](https://github.com/DisQada/Scraper/actions/workflows/test.yml/badge.svg)](https://github.com/DisQada/Scraper/actions/workflows/test.yml)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 
 ## Table of Contents
 
-- [Scrapper](#scrapper)
+- [Scraper](#scraper)
   - [Badges](#badges)
   - [Table of Contents](#table-of-contents)
   - [About](#about)
@@ -29,6 +29,8 @@
     - [download](#download)
       - [Arguments](#arguments)
       - [Examples](#examples)
+- [Scraper](#scraper-1)
+- [Scraper](#scraper-2)
 
 ## About
 
@@ -48,9 +50,9 @@ See the [LICENSE](LICENSE.txt) file for more information.
 ## Basic information
 
 As the package [himalaya] breaks down the JSON output into nodes, this package is following the same concept (HTML tag = JSON object/node) with the main node types being:
-- [Element node](https://disqada.github.io/Scrapper/types/ElementNode): Container of the main information defining the tag like the tag name, attributes and children nodes
-- [Text node](https://disqada.github.io/Scrapper/types/TextNode): Container of the text value in the HTML tag
-- [Comment node](https://disqada.github.io/Scrapper/types/CommentNode): 
+- [Element node](https://disqada.github.io/Scraper/types/ElementNode): Container of the main information defining the tag like the tag name, attributes and children nodes
+- [Text node](https://disqada.github.io/Scraper/types/TextNode): Container of the text value in the HTML tag
+- [Comment node](https://disqada.github.io/Scraper/types/CommentNode): 
 
 Click on the individual node link to read further details about the type
 
@@ -83,7 +85,7 @@ const nodes = parse(html)
 ### A full node
 
 ```js
-const { findNode } = require('@disqada/scrapper')
+const { findNode } = require('@disqada/scraper')
 
 const node = findNode(nodes,  {
   tag: 'h1',
@@ -104,7 +106,7 @@ const node = findNode(nodes,  {
 ### A text value
 
 ```js
-const { grabAText } = require('@disqada/scrapper')
+const { grabAText } = require('@disqada/scraper')
 
 const text = grabAText(nodes, {
   title: 'p'
@@ -115,7 +117,7 @@ const text = grabAText(nodes, {
 
 #### TextOptions
 
-The function [`grabText`](https://disqada.github.io/Scrapper/functions/grabText) can be given a [`TextOptions`](https://disqada.github.io/Scrapper/types/TextOptions) object that specifies some configurations for the search process, note that it's optional
+The function [`grabText`](https://disqada.github.io/Scraper/functions/grabText) can be given a [`TextOptions`](https://disqada.github.io/Scraper/types/TextOptions) object that specifies some configurations for the search process, note that it's optional
 
 > Click on the blue highlighted `TextOptions` to read more
 
@@ -123,7 +125,7 @@ The function [`grabText`](https://disqada.github.io/Scrapper/functions/grabText)
 
 
 ```js
-const { grabAttr } = require('@disqada/scrapper')
+const { grabAttr } = require('@disqada/scraper')
 
 const attr = grabAttr(nodes, {
   tag: 'p',
@@ -151,13 +153,13 @@ You can download an HTML file and it's parsed json file under `scrap` folder in 
 #### Examples
 
 ```bash
-npm explore @disqada/scrapper -- npm run download --url='https://example.com/sample' --file='sample'
+npm explore @disqada/scraper -- npm run download --url='https://example.com/sample' --file='sample'
 ```
 
 ```bash
-npm explore @disqada/scrapper -- npm run download --path='./samples/v1/index.html' --file='sample1'
+npm explore @disqada/scraper -- npm run download --path='./samples/v1/index.html' --file='sample1'
 ```
 
-[himalaya]: https://www.npmjs.com/package/himalaya# Scrapper
-# Scrapper
-# Scrapper
+[himalaya]: https://www.npmjs.com/package/himalaya# Scraper
+# Scraper
+# Scraper

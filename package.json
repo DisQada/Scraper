@@ -1,8 +1,8 @@
 {
-  "displayName": "Scrapper",
-  "name": "@disqada/scrapper",
+  "displayName": "Scraper",
+  "name": "@disqada/scraper",
   "version": "1.0.0",
-  "description": "Very simple and easy to use web scrapper",
+  "description": "Very simple and easy to use web scraper",
   "scripts": {
     "download": "node ./bin/download.js",
     "config": "npm explore @disqada/typedoc -- npm run config",
@@ -29,19 +29,21 @@
     "*.md",
     "*.txt"
   ],
-  "homepage": "https://disqada.github.io/Scrapper",
+  "homepage": "https://disqada.github.io/Scraper",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DisQada/Scrapper.git"
+    "url": "https://github.com/DisQada/Scraper.git"
   },
   "bugs": {
-    "url": "https://github.com/DisQada/Scrapper/issues"
+    "url": "https://github.com/DisQada/Scraper/issues"
   },
   "keywords": [
     "web",
     "scrape",
-    "scrapper",
-    "web scrapper"
+    "scraper",
+    "selector",
+    "search",
+    "web scraper"
   ],
   "author": {
     "name": "The Alpha",
