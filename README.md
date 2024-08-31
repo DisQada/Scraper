@@ -43,7 +43,7 @@ Read [this](#basic-information) for more information
 Copyright &copy; 2024 [DisQada](https://github.com/nabil-alsaiad)
 
 This tool is licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) License.  
-See the [LICENSE](LICENSE.txt) file for more information.
+See the [LICENSE](LICENSE) file for more information.
 
 # Getting Started
 
