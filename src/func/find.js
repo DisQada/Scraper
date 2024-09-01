@@ -1,15 +1,16 @@
+/** @import {Node, Selector, ModifiedENode, ElementNode, TextOptions, Key} from '../options.js' */
 import { matchNode } from './match.js'
 import { parse } from 'himalaya'
 
 /**
  * Finding a node according to the given selector.
- * @param {string | import('../options').Node[]} nodes - The node array to search in.
- * @param {import('../options').Selector} sel - The selectors defining the node wanted to be returned.
- * @returns {import('../options').ModifiedENode | undefined} The found node.
+ * @param {string | Node[]} nodes - The node array to search in.
+ * @param {Selector} sel - The selectors defining the node wanted to be returned.
+ * @returns {ModifiedENode | undefined} The found node.
  * @public
  */
 export function findNode(nodes, sel) {
-  /** @type {import('../options').Node[]} */
+  /** @type {Node[]} */
   const _nodes = typeof nodes === 'string' ? parse(nodes) : nodes
 
   if (!_nodes || _nodes.length === 0) {
@@ -35,17 +36,16 @@ export function findNode(nodes, sel) {
 
 /**
  * Prepare a node for chaining.
- * @param {import('../options').ElementNode} node - The found node.
- * @returns {import('../options').ModifiedENode} The node after adding to it the chain properties.
+ * @param {ElementNode} node - The found node.
+ * @returns {ModifiedENode} The node after adding to it the chain properties.
  * @private
  */
-function modifyNode(node) {
+export function modifyNode(node) {
   // @ts-expect-error
-  node.child = (/** @type {import('../options').Selector} */ selector) =>
-    findNode(node.children, selector)
+  node.child = (/** @type {Selector} */ selector) => findNode(node.children, selector)
 
   // @ts-expect-error
-  node.attr = (/** @type {import('../options').Key} */ key) => {
+  node.attr = (/** @type {Key} */ key) => {
     const length = node.attributes.length
     if (length === 0) {
       return ''
@@ -60,9 +60,7 @@ function modifyNode(node) {
   }
 
   // @ts-expect-error
-  node.text = (
-    /** @type {import("../options").TextOptions | undefined} */ options
-  ) => {
+  node.text = (/** @type {TextOptions | undefined} */ options) => {
     const length = node.children.length
     if (length === 0) {
       return ''

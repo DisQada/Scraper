@@ -1,7 +1,9 @@
+/** @import {Node, Attribute, ElementNode, ObjAttr, Selector} from '../options.js' */
+
 /**
  * Check that the selector exist in the node.
- * @param {import('../options').ElementNode} node - The node to match against the selector.
- * @param {import('../options').Selector} sel - The selectors to look for in the node.
+ * @param {ElementNode} node - The node to match against the selector.
+ * @param {Selector} sel - The selectors to look for in the node.
  * @returns {boolean} True if the selector exist in the node, false otherwise.
  * @private
  */
@@ -35,8 +37,8 @@ export function matchNode(node, sel) {
 
 /**
  * Check that the `attrs` exist in the `nodeAttrs`.
- * @param {import('../options').ObjAttr[]} nodeAttrs - The attributes array from a node.
- * @param {import('../options').Attribute[]} attrs - The attributes to look for. (if array is empty then it'll check if `nodeAttrs` is empty too)
+ * @param {ObjAttr[]} nodeAttrs - The attributes array from a node.
+ * @param {Attribute[]} attrs - The attributes to look for. (if array is empty then it'll check if `nodeAttrs` is empty too)
  * @returns {boolean} True if the selectorAttrs exist in the `nodeAttrs`, false otherwise.
  * @private
  */
@@ -65,8 +67,8 @@ export function attrsSubset(nodeAttrs, attrs) {
 
 /**
  * Check that the nodeAttrs has at least one attribute equal to the selectorAttr.
- * @param {import('../options').ObjAttr[]} nodeAttrs - The attributes array from a node.
- * @param {import('../options').Attribute} attr - The attribute to look for.
+ * @param {ObjAttr[]} nodeAttrs - The attributes array from a node.
+ * @param {Attribute} attr - The attribute to look for.
  * @returns {boolean} True if the nodeAttrs has at least one attribute equal to the selectorAttr, false otherwise.
  * @private
  */
@@ -89,8 +91,8 @@ export function attrExists(nodeAttrs, attr) {
 }
 
 /**
- * @param {import('../options').Attribute[]} attrs
- * @returns {import('../options').ObjAttr[]}
+ * @param {Attribute[]} attrs
+ * @returns {ObjAttr[]}
  */
 export function toObjAttrs(attrs) {
   for (let i = 0; i < attrs.length; i++) {
@@ -102,8 +104,8 @@ export function toObjAttrs(attrs) {
 }
 
 /**
- * @param {import('../options').Attribute} attr
- * @returns {import('../options').ObjAttr}
+ * @param {Attribute} attr
+ * @returns {ObjAttr}
  */
 export function toObjAttr(attr) {
   if (typeof attr !== 'string') {
@@ -118,8 +120,8 @@ export function toObjAttr(attr) {
 
 /**
  * Check that the `attrs` exist in the `nodeAttrs`.
- * @param {import('../options').Node[]} nodes - The attributes array from a node.
- * @param {import('../options').Selector[]} selectors - The attributes to look for. (if array is empty then it'll check if `nodeChildren` is empty too)
+ * @param {Node[]} nodes - The attributes array from a node.
+ * @param {Selector[]} selectors - The attributes to look for. (if array is empty then it'll check if `nodeChildren` is empty too)
  * @returns {boolean} True if the selectorAttrs exist in the `nodeAttrs`, false otherwise.
  * @private
  */
@@ -141,8 +143,8 @@ export function matchChildren(nodes, selectors) {
 
 /**
  * Check that the nodeAttrs has at least one attribute equal to the selectorAttr.
- * @param {import('../options').Node[]} nodes - The attributes array from a node.
- * @param {import('../options').Selector} sel - The attribute to look for.
+ * @param {Node[]} nodes - The attributes array from a node.
+ * @param {Selector} sel - The attribute to look for.
  * @returns {boolean} True if the nodeAttrs has at least one attribute equal to the selectorAttr, false otherwise.
  * @private
  */
