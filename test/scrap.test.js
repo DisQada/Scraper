@@ -1,11 +1,11 @@
 /** @import {Node} from '../types/options.js' */
-const { ok } = require('assert/strict')
+import { ok } from 'assert/strict'
 
 describe('scrap', function () {
-  it('should be valid', function () {
+  it('should be valid', async function () {
     /** @type {Node[]} */ // @ts-expect-error
-    const nodes = require('./scrap.json')
-    ok(isValidHimalayaNodesOutput(nodes))
+    const nodes = (await import('../scrap.json', { assert: { type: 'json' } })).default
+    ok(validNodes(nodes))
   })
 })
 
@@ -14,7 +14,7 @@ describe('scrap', function () {
  * @param {Node[]} nodes - the json to check (an array of nodes)
  * @returns {boolean} whether the json is a valid Himalaya output
  */
-function isValidHimalayaNodesOutput(nodes) {
+function validNodes(nodes) {
   return nodes.every(isValidHimalayaNodeOutput)
 
   /**

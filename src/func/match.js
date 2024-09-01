@@ -5,7 +5,7 @@
  * @returns {boolean} True if the selector exist in the node, false otherwise.
  * @private
  */
-function matchNode(node, sel) {
+export function matchNode(node, sel) {
   if (sel.tag && sel.tag !== node.tagName) {
     return false
   }
@@ -22,10 +22,10 @@ function matchNode(node, sel) {
 
   if (node.children && sel.child) {
     if (Array.isArray(sel.child)) {
-      if (!childrenSubset(node.children, sel.child)) {
+      if (!matchChildren(node.children, sel.child)) {
         return false
       }
-    } else if (!childExists(node.children, sel.child)) {
+    } else if (!matchChild(node.children, sel.child)) {
       return false
     }
   }
@@ -40,7 +40,7 @@ function matchNode(node, sel) {
  * @returns {boolean} True if the selectorAttrs exist in the `nodeAttrs`, false otherwise.
  * @private
  */
-function attrsSubset(nodeAttrs, attrs) {
+export function attrsSubset(nodeAttrs, attrs) {
   if (nodeAttrs.length === 0) {
     return true
   } else if (attrs.length === 0) {
@@ -70,7 +70,7 @@ function attrsSubset(nodeAttrs, attrs) {
  * @returns {boolean} True if the nodeAttrs has at least one attribute equal to the selectorAttr, false otherwise.
  * @private
  */
-function attrExists(nodeAttrs, attr) {
+export function attrExists(nodeAttrs, attr) {
   attr = toObjAttr(attr)
 
   const noValue = !('value' in attr)
@@ -92,7 +92,7 @@ function attrExists(nodeAttrs, attr) {
  * @param {import('../options').Attribute[]} attrs
  * @returns {import('../options').ObjAttr[]}
  */
-function toObjAttrs(attrs) {
+export function toObjAttrs(attrs) {
   for (let i = 0; i < attrs.length; i++) {
     attrs[i] = toObjAttr(attrs[i])
   }
@@ -105,7 +105,7 @@ function toObjAttrs(attrs) {
  * @param {import('../options').Attribute} attr
  * @returns {import('../options').ObjAttr}
  */
-function toObjAttr(attr) {
+export function toObjAttr(attr) {
   if (typeof attr !== 'string') {
     return attr
   }
@@ -123,7 +123,7 @@ function toObjAttr(attr) {
  * @returns {boolean} True if the selectorAttrs exist in the `nodeAttrs`, false otherwise.
  * @private
  */
-function childrenSubset(nodes, selectors) {
+export function matchChildren(nodes, selectors) {
   if (nodes.length === 0) {
     return true
   } else if (selectors.length === 0) {
@@ -131,7 +131,7 @@ function childrenSubset(nodes, selectors) {
   }
 
   for (let i = 0; i < selectors.length; i++) {
-    if (!childExists(nodes, selectors[i])) {
+    if (!matchChild(nodes, selectors[i])) {
       return false
     }
   }
@@ -146,7 +146,7 @@ function childrenSubset(nodes, selectors) {
  * @returns {boolean} True if the nodeAttrs has at least one attribute equal to the selectorAttr, false otherwise.
  * @private
  */
-function childExists(nodes, sel) {
+export function matchChild(nodes, sel) {
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i]
 
@@ -170,10 +170,10 @@ function childExists(nodes, sel) {
 
     if (node.children && sel.child) {
       if (Array.isArray(sel.child)) {
-        if (!childrenSubset(node.children, sel.child)) {
+        if (!matchChildren(node.children, sel.child)) {
           continue
         }
-      } else if (!childExists(node.children, sel.child)) {
+      } else if (!matchChild(node.children, sel.child)) {
         continue
       }
     }
@@ -182,14 +182,4 @@ function childExists(nodes, sel) {
   }
 
   return false
-}
-
-module.exports = {
-  matchNode,
-  matchChildren: childrenSubset,
-  matchChild: childExists,
-  attrsSubset,
-  attrExists,
-  toObjAttrs,
-  toObjAttr
 }

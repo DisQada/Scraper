@@ -1,3 +1,5 @@
+export {}
+
 /**
  * @typedef {ElementNode | TextNode | CommentNode} Node
  * @property {string} type The type of the node.
@@ -102,5 +104,3 @@
  */
 
 // TODO: Make selector use object instead of array of objects, the property name will be the key, and the value will be the value.
-
-module.exports = {}

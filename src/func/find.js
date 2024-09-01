@@ -1,5 +1,5 @@
-const { matchNode } = require('./match')
-const { parse } = require('himalaya')
+import { matchNode } from './match.js'
+import { parse } from 'himalaya'
 
 /**
  * Finding a node according to the given selector.
@@ -8,7 +8,7 @@ const { parse } = require('himalaya')
  * @returns {import('../options').ModifiedENode | undefined} The found node.
  * @public
  */
-function findNode(nodes, sel) {
+export function findNode(nodes, sel) {
   /** @type {import('../options').Node[]} */
   const _nodes = typeof nodes === 'string' ? parse(nodes) : nodes
 
@@ -84,5 +84,3 @@ function modifyNode(node) {
   // @ts-expect-error
   return node
 }
-
-module.exports = { findNode }

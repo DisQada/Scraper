@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-const { existsSync, mkdirSync, writeFileSync, readFile } = require('fs')
-const { resolve, join } = require('path')
-const { parse } = require('himalaya')
-const { get: httpGet } = require('http')
-const { get: httpsGet } = require('https')
+import { existsSync, mkdirSync, writeFileSync, readFile } from 'fs'
+import { resolve, join } from 'path'
+import { parse } from 'himalaya'
+import { get as httpGet } from 'http'
+import { get as httpsGet } from 'https'
 
 const config = {
   /** @type {string | null} */

@@ -63,7 +63,7 @@ First and most importantly is that we need to have our HTML string ready in a va
 If you're gonna use the same HTML string for multiple uses then it's better to parse it by yourself then pass the JSON output to the functions (so the HTML string will be parsed once only), the following example shows how to
 
 ```js
-const { parse } = require('himalaya')
+import { parse } from 'himalaya'
 
 // Use another package to fetch the HTML from the web
 const html = `
@@ -85,7 +85,7 @@ const nodes = parse(html)
 ### A full node
 
 ```js
-const { findNode } = require('@disqada/scraper')
+import { findNode } from '@disqada/scraper'
 
 const node = findNode(nodes,  {
   tag: 'h1',
@@ -106,7 +106,7 @@ const node = findNode(nodes,  {
 ### A text value
 
 ```js
-const { grabAText } = require('@disqada/scraper')
+import { grabAText } from '@disqada/scraper'
 
 const text = grabAText(nodes, {
   title: 'p'
@@ -125,7 +125,7 @@ The function [`grabText`](https://disqada.github.io/Scraper/functions/grabText) 
 
 
 ```js
-const { grabAttr } = require('@disqada/scraper')
+import { grabAttr } from '@disqada/scraper'
 
 const attr = grabAttr(nodes, {
   tag: 'p',

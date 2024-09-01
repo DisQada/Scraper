@@ -1,9 +1,9 @@
 /** @import {ElementNode, ModifiedENode} from '../../src/options.js' */
-const { equal, deepEqual } = require('assert/strict')
-const { findNode } = require('../../src/func/find.js')
+import { equal, deepEqual } from 'assert/strict'
+import { findNode } from '../../src/func/find.js'
 
 /** @type {ElementNode[]} */ // @ts-expect-error
-const nodes = require('../scrap.json')
+const nodes = (await import('../../scrap.json', { assert: { type: 'json' } })).default
 
 describe('func', function () {
   describe('find', function () {

@@ -1,6 +1,6 @@
 /** @import {ObjAttr, Attribute} from '../../src/options.js' */
-const { ok } = require('assert/strict')
-const { attrExists, attrsSubset } = require('../../src/func/match.js')
+import { ok } from 'assert/strict'
+import { attrExists, attrsSubset } from '../../src/func/match.js'
 
 describe('func', function () {
   describe('match', function () {
