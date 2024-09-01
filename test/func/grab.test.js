@@ -1,41 +1,29 @@
-const { grabText, grabAttr } = require('../../src/func/grab')
+/** @import {ElementNode} from '../../src/options.js' */
+const { equal } = require('assert/strict')
+const { grabText, grabAttr } = require('../../src/func/grab.js')
 
-/** @type {import('../../src/options').ElementNode[]} */
-// @ts-expect-error
+/** @type {ElementNode[]} */ // @ts-expect-error
 const json = require('../scrap.json')
 
-describe('Grabing text', () => {
-  test('Without options', () => {
-    const text = grabText(json, {
-      tag: 'nested3'
+describe('func', function () {
+  describe('grab', function () {
+    describe('grabText()', function () {
+      it('Without options', function () {
+        const text = grabText(json, { tag: 'nested3' })
+        equal(text, 'Hello World!')
+      })
+
+      it('With options.deep', function () {
+        const text = grabText(json, { tag: 'nested3' }, { deep: true })
+        equal(text, 'Hello World!')
+      })
     })
 
-    expect(text).toEqual('Hello World!')
-  })
-
-  test('With options.deep', () => {
-    const text = grabText(
-      json,
-      {
-        tag: 'nested3'
-      },
-      { deep: true }
-    )
-
-    expect(text).toEqual('Hello World!')
-  })
-})
-
-describe('Grabing attr', () => {
-  test('...', () => {
-    const arr = grabAttr(
-      json,
-      {
-        tag: 'p'
-      },
-      'class'
-    )
-
-    expect(arr).toEqual('three')
+    describe('grabAttr()', function () {
+      it('Grab value', function () {
+        const arr = grabAttr(json, { tag: 'p' }, 'class')
+        equal(arr, 'three')
+      })
+    })
   })
 })

@@ -1,6 +1,17 @@
+/** @import {Node} from '../types/options.js' */
+const { ok } = require('assert/strict')
+
+describe('scrap', function () {
+  it('should be valid', function () {
+    /** @type {Node[]} */ // @ts-expect-error
+    const nodes = require('./scrap.json')
+    ok(isValidHimalayaNodesOutput(nodes))
+  })
+})
+
 /**
  * Check if a json is a valid Himalaya output
- * @param {import('../types/options').Node[]} nodes - the json to check (an array of nodes)
+ * @param {Node[]} nodes - the json to check (an array of nodes)
  * @returns {boolean} whether the json is a valid Himalaya output
  */
 function isValidHimalayaNodesOutput(nodes) {
@@ -8,7 +19,7 @@ function isValidHimalayaNodesOutput(nodes) {
 
   /**
    * Check if a json is a valid Himalaya output
-   * @param {import('../types/options').Node} node - the json to check (a single node)
+   * @param {Node} node - the json to check (a single node)
    * @returns {boolean} whether the json is a valid Himalaya output
    */
   function isValidHimalayaNodeOutput(node) {
@@ -26,10 +37,7 @@ function isValidHimalayaNodesOutput(nodes) {
         return (
           ['tagName', 'attributes', 'children'].every((prop) => prop in node) &&
           Array.isArray(node.attributes) &&
-          node.attributes.every(
-            (attr) =>
-              typeof attr === 'object' && !Array.isArray(attr) && 'key' in attr
-          ) &&
+          node.attributes.every((attr) => typeof attr === 'object' && !Array.isArray(attr) && 'key' in attr) &&
           Array.isArray(node.children) &&
           node.children.every((child) => isValidHimalayaNodeOutput(child))
         )
@@ -40,12 +48,3 @@ function isValidHimalayaNodesOutput(nodes) {
     }
   }
 }
-
-describe('scrap', () => {
-  it('should be valid', () => {
-    /** @type {import('../src/options').Node[]} */
-    // @ts-expect-error
-    const nodes = require('./scrap.json')
-    expect(isValidHimalayaNodesOutput(nodes)).toBeTruthy()
-  })
-})

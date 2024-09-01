@@ -1,127 +1,62 @@
-const { attrsSubset, attrExists } = require('../../src/func/match')
+/** @import {ObjAttr, Attribute} from '../../src/options.js' */
+const { ok } = require('assert/strict')
+const { attrExists, attrsSubset } = require('../../src/func/match.js')
 
-describe('Checking the existence of a single attribute', () => {
-  test('With value', () => {
-    /** @type {import('../../src/options').ObjAttr[]} */
-    const nodeAttrs = [
-      {
-        key: 'class',
-        value: 'yes'
-      }
-    ]
-    /** @type {import('../../src/options').Attribute} */
-    const sAttr = {
-      key: 'class',
-      value: 'yes'
-    }
-    const result = attrExists(nodeAttrs, sAttr)
-    expect(result).toBeTruthy()
-  })
+describe('func', function () {
+  describe('match', function () {
+    describe('attrExists()', function () {
+      it('With value', function () {
+        /** @type {ObjAttr[]} */
+        const nodeAttrs = [{ key: 'class', value: 'yes' }]
+        /** @type {Attribute} */
+        const sAttr = { key: 'class', value: 'yes' }
+        const result = attrExists(nodeAttrs, sAttr)
 
-  test('Without value', () => {
-    /** @type {import('../../src/options').ObjAttr[]} */
-    const nodeAttrs = [
-      {
-        key: 'href',
-        value: 'https://example.com'
-      }
-    ]
-    /** @type {import('../../src/options').Attribute} */
-    const sAttr = {
-      key: 'href'
-    }
-    const result = attrExists(nodeAttrs, sAttr)
-    expect(result).toBeTruthy()
-  })
-})
+        ok(result)
+      })
 
-describe('Checking the existence of multiple attributes', () => {
-  test('With value', () => {
-    /** @type {import('../../src/options').ObjAttr[]} */
-    const nodeAttrs = [
-      {
-        key: 'class',
-        value: 'yes'
-      }
-    ]
+      it('Without value', function () {
+        /** @type {ObjAttr[]} */
+        const nodeAttrs = [{ key: 'href', value: 'https://example.com' }]
+        /** @type {Attribute} */
+        const sAttr = { key: 'href' }
+        const result = attrExists(nodeAttrs, sAttr)
 
-    const result = attrsSubset(nodeAttrs, [
-      {
-        key: 'class',
-        value: 'yes'
-      }
-    ])
-    expect(result).toBeTruthy()
+        ok(result)
+      })
+    })
 
-    expect(
-      attrsSubset(nodeAttrs, [
-        {
-          key: 'class',
-          value: 'no'
-        }
-      ])
-    ).toBeFalsy()
+    describe('attrsSubset()', function () {
+      it('With value', function () {
+        /** @type {ObjAttr[]} */
+        const nodeAttrs = [{ key: 'class', value: 'yes' }]
+        const result = attrsSubset(nodeAttrs, [{ key: 'class', value: 'yes' }])
 
-    expect(
-      attrsSubset(nodeAttrs, [
-        {
-          key: 'clazz',
-          value: 'yes'
-        }
-      ])
-    ).toBeFalsy()
+        ok(result)
+        ok(!attrsSubset(nodeAttrs, [{ key: 'class', value: 'no' }]))
+        ok(!attrsSubset(nodeAttrs, [{ key: 'clazz', value: 'yes' }]))
+        ok(
+          !attrsSubset(nodeAttrs, [
+            { key: 'class', value: 'yes' },
+            { key: 'clazz', value: 'no' }
+          ])
+        )
+      })
 
-    expect(
-      attrsSubset(nodeAttrs, [
-        {
-          key: 'class',
-          value: 'yes'
-        },
-        {
-          key: 'clazz',
-          value: 'no'
-        }
-      ])
-    ).toBeFalsy()
-  })
+      it('Without value', function () {
+        /** @type {ObjAttr[]} */
+        const nodeAttrs = [{ key: 'href', value: 'https://example.com' }]
 
-  test('Without value', () => {
-    /** @type {import('../../src/options').ObjAttr[]} */
-    const nodeAttrs = [
-      {
-        key: 'href',
-        value: 'https://example.com'
-      }
-    ]
+        ok(attrsSubset(nodeAttrs, [{ key: 'href' }]))
+        ok(!attrsSubset(nodeAttrs, [{ key: 'no' }]))
+      })
 
-    expect(
-      attrsSubset(nodeAttrs, [
-        {
-          key: 'href'
-        }
-      ])
-    ).toBeTruthy()
+      it('Empty array', function () {
+        /** @type {ObjAttr[]} */
+        const nodeAttrs = [{ key: 'class', value: 'yes' }]
 
-    expect(
-      attrsSubset(nodeAttrs, [
-        {
-          key: 'no'
-        }
-      ])
-    ).toBeFalsy()
-  })
-})
-
-describe('No or empty selector attributes', () => {
-  test('Empty array', () => {
-    /** @type {import('../../src/options').ObjAttr[]} */
-    const nodeAttrs = [
-      {
-        key: 'class',
-        value: 'yes'
-      }
-    ]
-
-    expect(attrsSubset(nodeAttrs, [])).toBeFalsy()
+        ok(!attrsSubset(nodeAttrs, []))
+      })
+    })
   })
 })

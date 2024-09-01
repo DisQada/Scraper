@@ -1,278 +1,164 @@
-const { findNode } = require('../../src/func/find')
+/** @import {ElementNode, ModifiedENode} from '../../src/options.js' */
+const { equal, deepEqual } = require('assert/strict')
+const { findNode } = require('../../src/func/find.js')
 
-/** @type {import('../../src/options').ElementNode[]} */
-// @ts-expect-error
+/** @type {ElementNode[]} */ // @ts-expect-error
 const nodes = require('../scrap.json')
 
-describe('Find the first node', () => {
-  test('Using tag name and attributes', () => {
-    const node = findNode(nodes, {
-      tag: 'p',
-      attr: [
-        {
-          key: 'class',
-          value: 'three'
-        },
-        {
-          key: 'id',
-          value: 'other'
-        }
-      ]
-    })
+describe('func', function () {
+  describe('find', function () {
+    describe('findNode()', function () {
+      it('Using tag name and attributes', function () {
+        const node = findNode(nodes, {
+          tag: 'p',
+          attr: [
+            { key: 'class', value: 'three' },
+            { key: 'id', value: 'other' }
+          ]
+        })
 
-    if (node) {
-      // @ts-expect-error
-      delete node.text
-      // @ts-expect-error
-      delete node.attr
-      // @ts-expect-error
-      delete node.child
-    }
-
-    expect(node).toEqual({
-      type: 'element',
-      tagName: 'p',
-      attributes: [
-        {
-          key: 'class',
-          value: 'three'
-        },
-        {
-          key: 'id',
-          value: 'other'
-        }
-      ],
-      children: []
-    })
-  })
-
-  test('Using tag name only', () => {
-    const node = findNode(nodes, {
-      tag: 'a'
-    })
-
-    if (node) {
-      // @ts-expect-error
-      delete node.text
-      // @ts-expect-error
-      delete node.attr
-      // @ts-expect-error
-      delete node.child
-    }
-
-    expect(node).toEqual({
-      type: 'element',
-      tagName: 'a',
-      attributes: [
-        {
-          key: 'class',
-          value: 'one'
-        }
-      ],
-      children: []
-    })
-  })
-
-  test('Using attributes only', () => {
-    const node = findNode(nodes, {
-      attr: [
-        {
-          key: 'class',
-          value: 'two'
-        }
-      ]
-    })
-
-    if (node) {
-      // @ts-expect-error
-      delete node.text
-      // @ts-expect-error
-      delete node.attr
-      // @ts-expect-error
-      delete node.child
-    }
-
-    expect(node).toEqual({
-      type: 'element',
-      tagName: 'img',
-      attributes: [
-        {
-          key: 'class',
-          value: 'two'
-        }
-      ],
-      children: []
-    })
-  })
-})
-
-describe('Find the first node with string attributes', () => {
-  test('Using tag name and string attributes', () => {
-    const node = findNode(nodes, {
-      tag: 'p',
-      attr: ['class=three', 'id=other']
-    })
-
-    if (node) {
-      // @ts-expect-error
-      delete node.text
-      // @ts-expect-error
-      delete node.attr
-      // @ts-expect-error
-      delete node.child
-    }
-
-    expect(node).toEqual({
-      type: 'element',
-      tagName: 'p',
-      attributes: [
-        {
-          key: 'class',
-          value: 'three'
-        },
-        {
-          key: 'id',
-          value: 'other'
-        }
-      ],
-      children: []
-    })
-  })
-
-  test('Using string attributes only', () => {
-    const node = findNode(nodes, {
-      attr: ['class=two']
-    })
-
-    if (node) {
-      // @ts-expect-error
-      delete node.text
-      // @ts-expect-error
-      delete node.attr
-      // @ts-expect-error
-      delete node.child
-    }
-
-    expect(node).toEqual({
-      type: 'element',
-      tagName: 'img',
-      attributes: [
-        {
-          key: 'class',
-          value: 'two'
-        }
-      ],
-      children: []
-    })
-  })
-
-  test('Using array of string attributes only', () => {
-    const node = findNode(nodes, {
-      attr: ['class=three', 'id=other']
-    })
-
-    if (node) {
-      // @ts-expect-error
-      delete node.text
-      // @ts-expect-error
-      delete node.attr
-      // @ts-expect-error
-      delete node.child
-    }
-
-    expect(node).toEqual({
-      type: 'element',
-      tagName: 'p',
-      attributes: [
-        {
-          key: 'class',
-          value: 'three'
-        },
-        {
-          key: 'id',
-          value: 'other'
-        }
-      ],
-      children: []
-    })
-  })
-
-  test('Using child property', () => {
-    const node = findNode(nodes, {
-      tag: 'p',
-      child: {
-        tag: 'href'
-      }
-    })
-
-    if (node) {
-      // @ts-expect-error
-      delete node.text
-      // @ts-expect-error
-      delete node.attr
-      // @ts-expect-error
-      delete node.child
-    }
-
-    expect(node).toEqual({
-      type: 'element',
-      tagName: 'p',
-      attributes: [],
-      children: [
-        {
+        deepEqual(cleanNode(node), {
           type: 'element',
-          tagName: 'href',
-          attributes: [],
+          tagName: 'p',
+          attributes: [
+            { key: 'class', value: 'three' },
+            { key: 'id', value: 'other' }
+          ],
           children: []
-        }
-      ]
+        })
+      })
+
+      it('Using tag name only', function () {
+        const node = findNode(nodes, { tag: 'a' })
+
+        deepEqual(cleanNode(node), {
+          type: 'element',
+          tagName: 'a',
+          attributes: [{ key: 'class', value: 'one' }],
+          children: []
+        })
+      })
+
+      it('Using attributes only', function () {
+        const node = findNode(nodes, {
+          attr: [{ key: 'class', value: 'two' }]
+        })
+
+        deepEqual(cleanNode(node), {
+          type: 'element',
+          tagName: 'img',
+          attributes: [{ key: 'class', value: 'two' }],
+          children: []
+        })
+      })
+
+      it('Using tag name and string attributes', function () {
+        const node = findNode(nodes, {
+          tag: 'p',
+          attr: ['class=three', 'id=other']
+        })
+
+        deepEqual(cleanNode(node), {
+          type: 'element',
+          tagName: 'p',
+          attributes: [
+            { key: 'class', value: 'three' },
+            { key: 'id', value: 'other' }
+          ],
+          children: []
+        })
+      })
+
+      it('Using string attributes only', function () {
+        const node = findNode(nodes, {
+          attr: ['class=two']
+        })
+
+        deepEqual(cleanNode(node), {
+          type: 'element',
+          tagName: 'img',
+          attributes: [{ key: 'class', value: 'two' }],
+          children: []
+        })
+      })
+
+      it('Using array of string attributes only', function () {
+        const node = findNode(nodes, {
+          attr: ['class=three', 'id=other']
+        })
+
+        deepEqual(cleanNode(node), {
+          type: 'element',
+          tagName: 'p',
+          attributes: [
+            { key: 'class', value: 'three' },
+            { key: 'id', value: 'other' }
+          ],
+          children: []
+        })
+
+        it('Using child property', function () {
+          const node = findNode(nodes, {
+            tag: 'p',
+            child: { tag: 'href' }
+          })
+
+          deepEqual(cleanNode(node), {
+            type: 'element',
+            tagName: 'p',
+            attributes: [],
+            children: [
+              {
+                type: 'element',
+                tagName: 'href',
+                attributes: [],
+                children: []
+              }
+            ]
+          })
+        })
+
+        it('Using child chain function', function () {
+          const node = findNode(nodes, { tag: 'nested2' })?.child({ tag: 'nested3' })
+
+          deepEqual(cleanNode(node), {
+            type: 'element',
+            tagName: 'nested3',
+            attributes: [],
+            children: [{ type: 'text', content: 'Hello World!' }]
+          })
+        })
+      })
     })
-  })
 
-  test('Using child chain function', () => {
-    const node = findNode(nodes, {
-      tag: 'nested2'
-    })?.child({
-      tag: 'nested3'
+    describe('.text()', function () {
+      it('Get value', function () {
+        const text = findNode(nodes, { tag: 'nested3' })?.text()
+        equal(text, 'Hello World!')
+      })
     })
 
-    if (node) {
-      // @ts-expect-error
-      delete node.text
-      // @ts-expect-error
-      delete node.attr
-      // @ts-expect-error
-      delete node.child
-    }
-
-    expect(node).toEqual({
-      type: 'element',
-      tagName: 'nested3',
-      attributes: [],
-      children: [
-        {
-          type: 'text',
-          content: 'Hello World!'
-        }
-      ]
+    describe('.attr()', function () {
+      it('Get value', function () {
+        const attr = findNode(nodes, { tag: 'p' })?.attr('class')
+        equal(attr, 'three')
+      })
     })
   })
 })
 
-describe('Get value', () => {
-  test('Get text value', () => {
-    const text = findNode(nodes, {
-      tag: 'nested3'
-    })?.text()
+/**
+ * @param {ModifiedENode|undefined} node
+ */
+function cleanNode(node) {
+  if (node) {
+    // @ts-expect-error
+    delete node.text
+    // @ts-expect-error
+    delete node.attr
+    // @ts-expect-error
+    delete node.child
+  }
 
-    expect(text).toEqual('Hello World!')
-  })
-
-  test('Get attribute value', () => {
-    const attr = findNode(nodes, {
-      tag: 'p'
-    })?.attr('class')
-
-    expect(attr).toEqual('three')
-  })
-})
+  return node
+}
