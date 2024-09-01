@@ -50,9 +50,10 @@ See the [LICENSE](LICENSE) file for more information.
 ## Basic information
 
 As the package [himalaya] breaks down the JSON output into nodes, this package is following the same concept (HTML tag = JSON object/node) with the main node types being:
+
 - [Element node](https://disqada.github.io/Scraper/types/ElementNode): Container of the main information defining the tag like the tag name, attributes and children nodes
 - [Text node](https://disqada.github.io/Scraper/types/TextNode): Container of the text value in the HTML tag
-- [Comment node](https://disqada.github.io/Scraper/types/CommentNode): 
+- [Comment node](https://disqada.github.io/Scraper/types/CommentNode):
 
 Click on the individual node link to read further details about the type
 
@@ -87,10 +88,10 @@ const nodes = parse(html)
 ```js
 import { findNode } from '@disqada/scraper'
 
-const node = findNode(nodes,  {
+const node = findNode(nodes, {
   tag: 'h1',
   attr: {
-    key: 'id', 
+    key: 'id',
     value: 'title'
   }
 })
@@ -123,13 +124,16 @@ The function [`grabText`](https://disqada.github.io/Scraper/functions/grabText) 
 
 ### An attribute value
 
-
 ```js
 import { grabAttr } from '@disqada/scraper'
 
-const attr = grabAttr(nodes, {
-  tag: 'p',
-}, 'class')
+const attr = grabAttr(
+  nodes,
+  {
+    tag: 'p'
+  },
+  'class'
+)
 
 // attr = 'content'
 ```
@@ -147,7 +151,7 @@ You can download an HTML file and it's parsed json file under `scrap` folder in 
 | Arg name | required | Column3                                                                        |
 | -------- | -------- | ------------------------------------------------------------------------------ |
 | `--file` | true     | Name of the downloaded html and parsed json file                               |
-| `--url`  | false    | Link of  web page                                                              |
+| `--url`  | false    | Link of web page                                                               |
 | `--path` | false    | Path of a local html file (the html file will be copied to the `scrap` folder) |
 
 #### Examples
@@ -161,5 +165,7 @@ npm explore @disqada/scraper -- npm run download --path='./samples/v1/index.html
 ```
 
 [himalaya]: https://www.npmjs.com/package/himalaya# Scraper
+
 # Scraper
+
 # Scraper

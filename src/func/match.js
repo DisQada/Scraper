@@ -8,28 +8,18 @@
  * @private
  */
 export function matchNode(node, sel) {
-  if (sel.tag && sel.tag !== node.tagName) {
-    return false
-  }
+  if (sel.tag && sel.tag !== node.tagName) return false
 
   if (node.attributes && sel.attr) {
     if (Array.isArray(sel.attr)) {
-      if (!attrsSubset(node.attributes, sel.attr)) {
-        return false
-      }
-    } else if (!attrExists(node.attributes, sel.attr)) {
-      return false
-    }
+      if (!attrsSubset(node.attributes, sel.attr)) return false
+    } else if (!attrExists(node.attributes, sel.attr)) return false
   }
 
   if (node.children && sel.child) {
     if (Array.isArray(sel.child)) {
-      if (!matchChildren(node.children, sel.child)) {
-        return false
-      }
-    } else if (!matchChild(node.children, sel.child)) {
-      return false
-    }
+      if (!matchChildren(node.children, sel.child)) return false
+    } else if (!matchChild(node.children, sel.child)) return false
   }
 
   return true
@@ -43,11 +33,8 @@ export function matchNode(node, sel) {
  * @private
  */
 export function attrsSubset(nodeAttrs, attrs) {
-  if (nodeAttrs.length === 0) {
-    return true
-  } else if (attrs.length === 0) {
-    return false
-  }
+  if (nodeAttrs.length === 0) return true
+  else if (attrs.length === 0) return false
 
   let nodeAttrsCopy = nodeAttrs.slice()
   let attrsCopy = toObjAttrs(attrs.slice())
@@ -57,9 +44,7 @@ export function attrsSubset(nodeAttrs, attrs) {
       // TODO: Remove the found attribute from the copy arrays.
       // attrsCopy = attrsCopy.filter((a) => a.key !== attrsCopy[i].key)
       // nodeAttrsCopy = nodeAttrsCopy.filter((a) => a.key !== attrsCopy[i].key)
-    } else {
-      return false
-    }
+    } else return false
   }
 
   return true
@@ -79,12 +64,7 @@ export function attrExists(nodeAttrs, attr) {
   for (let i = 0; i < nodeAttrs.length; i++) {
     const nodeAttr = nodeAttrs[i]
 
-    if (
-      attr.key === nodeAttr.key &&
-      (noValue || attr.value === nodeAttr.value)
-    ) {
-      return true
-    }
+    if (attr.key === nodeAttr.key && (noValue || attr.value === nodeAttr.value)) return true
   }
 
   return false
@@ -108,9 +88,7 @@ export function toObjAttrs(attrs) {
  * @returns {ObjAttr}
  */
 export function toObjAttr(attr) {
-  if (typeof attr !== 'string') {
-    return attr
-  }
+  if (typeof attr !== 'string') return attr
 
   const pair = attr.split('=')
   const key = pair[0]
@@ -126,16 +104,11 @@ export function toObjAttr(attr) {
  * @private
  */
 export function matchChildren(nodes, selectors) {
-  if (nodes.length === 0) {
-    return true
-  } else if (selectors.length === 0) {
-    return false
-  }
+  if (nodes.length === 0) return true
+  else if (selectors.length === 0) return false
 
   for (let i = 0; i < selectors.length; i++) {
-    if (!matchChild(nodes, selectors[i])) {
-      return false
-    }
+    if (!matchChild(nodes, selectors[i])) return false
   }
 
   return true
@@ -152,32 +125,20 @@ export function matchChild(nodes, sel) {
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i]
 
-    if (node.type !== 'element') {
-      continue
-    }
+    if (node.type !== 'element') continue
 
-    if (sel.tag && sel.tag !== node.tagName) {
-      continue
-    }
+    if (sel.tag && sel.tag !== node.tagName) continue
 
     if (node.attributes && sel.attr) {
       if (Array.isArray(sel.attr)) {
-        if (!attrsSubset(node.attributes, sel.attr)) {
-          continue
-        }
-      } else if (!attrExists(node.attributes, sel.attr)) {
-        continue
-      }
+        if (!attrsSubset(node.attributes, sel.attr)) continue
+      } else if (!attrExists(node.attributes, sel.attr)) continue
     }
 
     if (node.children && sel.child) {
       if (Array.isArray(sel.child)) {
-        if (!matchChildren(node.children, sel.child)) {
-          continue
-        }
-      } else if (!matchChild(node.children, sel.child)) {
-        continue
-      }
+        if (!matchChildren(node.children, sel.child)) continue
+      } else if (!matchChild(node.children, sel.child)) continue
     }
 
     return true
