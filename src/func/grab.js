@@ -11,7 +11,7 @@ import { parse } from 'himalaya'
 export function grabText(nodes, sel, options) {
   /** @type {Node[]} */
   const _nodes = typeof nodes === 'string' ? parse(nodes) : nodes
-  return findNode(_nodes, sel)?.text(options)
+  return findNode(_nodes, sel)?.getText(options)
 }
 
 /**
@@ -23,5 +23,5 @@ export function grabText(nodes, sel, options) {
 export function grabAttr(nodes, sel, attr) {
   /** @type {Node[]} */
   const _nodes = typeof nodes === 'string' ? parse(nodes) : nodes
-  return findNode(_nodes, sel)?.attr(attr)
+  return findNode(_nodes, sel)?.getAttr(attr)
 }

@@ -14,9 +14,9 @@ export {}
 
 /**
  * @typedef {object} NodeModifications
- * @property {Child} child Chain function to find a node in the children array.
- * @property {Attr} attr Chain function to get the value of an attribute.
- * @property {Text} text Property with the text in the node.
+ * @property {GetChild} getChild Chain function to find a node in the children array.
+ * @property {GetAttr} getAttr Chain function to get the value of an attribute.
+ * @property {GetText} getText Property with the text in the node.
  */
 
 /**
@@ -28,19 +28,22 @@ export {}
  */
 
 /**
- * @callback Child
+ * @callback GetChild
+ * @this {ElementNode}
  * @param {Selector} selector
  * @returns {ModifiedENode | undefined}
  */
 
 /**
- * @callback Attr
+ * @callback GetAttr
+ * @this {ElementNode}
  * @param {Key} key
  * @returns {string | undefined}
  */
 
 /**
- * @callback Text
+ * @callback GetText
+ * @this {ElementNode}
  * @param {TextOptions} [options]
  * @returns {string}
  */

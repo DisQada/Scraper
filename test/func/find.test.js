@@ -1,5 +1,5 @@
 /** @import {ElementNode, ModifiedENode} from '../../src/options.js' */
-import { equal, deepEqual } from 'assert/strict'
+import { ok, equal, deepEqual } from 'assert/strict'
 import { findNode } from '../../src/func/find.js'
 
 /** @type {ElementNode[]} */ // @ts-expect-error
@@ -17,7 +17,8 @@ describe('func', function () {
           ]
         })
 
-        deepEqual(cleanNode(node), {
+        ok(node)
+        deepEqual(clean(node), {
           type: 'element',
           tagName: 'p',
           attributes: [
@@ -31,7 +32,8 @@ describe('func', function () {
       it('Using tag name only', function () {
         const node = findNode(nodes, { tag: 'a' })
 
-        deepEqual(cleanNode(node), {
+        ok(node)
+        deepEqual(clean(node), {
           type: 'element',
           tagName: 'a',
           attributes: [{ key: 'class', value: 'one' }],
@@ -44,7 +46,8 @@ describe('func', function () {
           attr: [{ key: 'class', value: 'two' }]
         })
 
-        deepEqual(cleanNode(node), {
+        ok(node)
+        deepEqual(clean(node), {
           type: 'element',
           tagName: 'img',
           attributes: [{ key: 'class', value: 'two' }],
@@ -58,7 +61,8 @@ describe('func', function () {
           attr: ['class=three', 'id=other']
         })
 
-        deepEqual(cleanNode(node), {
+        ok(node)
+        deepEqual(clean(node), {
           type: 'element',
           tagName: 'p',
           attributes: [
@@ -74,7 +78,8 @@ describe('func', function () {
           attr: ['class=two']
         })
 
-        deepEqual(cleanNode(node), {
+        ok(node)
+        deepEqual(clean(node), {
           type: 'element',
           tagName: 'img',
           attributes: [{ key: 'class', value: 'two' }],
@@ -87,7 +92,8 @@ describe('func', function () {
           attr: ['class=three', 'id=other']
         })
 
-        deepEqual(cleanNode(node), {
+        ok(node)
+        deepEqual(clean(node), {
           type: 'element',
           tagName: 'p',
           attributes: [
@@ -103,7 +109,8 @@ describe('func', function () {
             child: { tag: 'href' }
           })
 
-          deepEqual(cleanNode(node), {
+          ok(node)
+          deepEqual(clean(node), {
             type: 'element',
             tagName: 'p',
             attributes: [],
@@ -119,9 +126,10 @@ describe('func', function () {
         })
 
         it('Using child chain function', function () {
-          const node = findNode(nodes, { tag: 'nested2' })?.child({ tag: 'nested3' })
+          const node = findNode(nodes, { tag: 'nested2' })?.getChild({ tag: 'nested3' })
 
-          deepEqual(cleanNode(node), {
+          ok(node)
+          deepEqual(clean(node), {
             type: 'element',
             tagName: 'nested3',
             attributes: [],
@@ -133,14 +141,14 @@ describe('func', function () {
 
     describe('.text()', function () {
       it('Get value', function () {
-        const text = findNode(nodes, { tag: 'nested3' })?.text()
+        const text = findNode(nodes, { tag: 'nested3' })?.getText()
         equal(text, 'Hello World!')
       })
     })
 
     describe('.attr()', function () {
       it('Get value', function () {
-        const attr = findNode(nodes, { tag: 'p' })?.attr('class')
+        const attr = findNode(nodes, { tag: 'p' })?.getAttr('class')
         equal(attr, 'three')
       })
     })
@@ -148,17 +156,16 @@ describe('func', function () {
 })
 
 /**
- * @param {ModifiedENode|undefined} node
+ * @param {ModifiedENode} node
+ * @returns {ElementNode}
  */
-function cleanNode(node) {
-  if (node) {
-    // @ts-expect-error
-    delete node.text
-    // @ts-expect-error
-    delete node.attr
-    // @ts-expect-error
-    delete node.child
-  }
+function clean(node) {
+  // @ts-expect-error
+  delete node.getChild
+  // @ts-expect-error
+  delete node.getAttr
+  // @ts-expect-error
+  delete node.getText
 
   return node
 }
