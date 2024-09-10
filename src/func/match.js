@@ -1,4 +1,5 @@
 /** @import {Node, Attribute, ElementNode, ObjAttr, Selector} from '../options.js' */
+import { removeQuotes } from './util.js'
 
 /**
  * Check that the selector exist in the node.
@@ -90,9 +91,8 @@ export function toObjAttrs(attrs) {
 export function toObjAttr(attr) {
   if (typeof attr !== 'string') return attr
 
-  const pair = attr.split('=')
-  const key = pair[0]
-  const value = pair[1]
+  let [key, value] = attr.split('=')
+  if (value) value = removeQuotes(value)
   return { key, value }
 }
 
