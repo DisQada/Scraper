@@ -55,7 +55,7 @@ describe('func', function () {
         /** @type {ObjAttr[]} */
         const nodeAttrs = [{ key: 'class', value: 'yes' }]
 
-        ok(!attrsSubset(nodeAttrs, []))
+        ok(attrsSubset(nodeAttrs, []))
       })
     })
   })

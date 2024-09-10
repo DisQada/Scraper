@@ -34,8 +34,8 @@ export function matchNode(node, sel) {
  * @private
  */
 export function attrsSubset(nodeAttrs, attrs) {
-  if (nodeAttrs.length === 0) return true
-  else if (attrs.length === 0) return false
+  if (attrs.length === 0) return true
+  if (attrs.length > nodeAttrs.length) return false
 
   let nodeAttrsCopy = nodeAttrs.slice()
   let attrsCopy = toObjAttrs(attrs.slice())
@@ -61,11 +61,9 @@ export function attrsSubset(nodeAttrs, attrs) {
 export function attrExists(nodeAttrs, attr) {
   attr = toObjAttr(attr)
 
-  const noValue = !('value' in attr)
   for (let i = 0; i < nodeAttrs.length; i++) {
     const nodeAttr = nodeAttrs[i]
-
-    if (attr.key === nodeAttr.key && (noValue || attr.value === nodeAttr.value)) return true
+    if (attr.key === nodeAttr.key && (attr.value === undefined || attr.value === nodeAttr.value)) return true
   }
 
   return false
@@ -104,8 +102,8 @@ export function toObjAttr(attr) {
  * @private
  */
 export function matchChildren(nodes, selectors) {
-  if (nodes.length === 0) return true
-  else if (selectors.length === 0) return false
+  if (selectors.length === 0) return true
+  if (selectors.length > nodes.length) return false
 
   for (let i = 0; i < selectors.length; i++) {
     if (!matchChild(nodes, selectors[i])) return false
