@@ -1,22 +1,18 @@
 /** @import {Node, Selector, ModifiedENode, ElementNode, GetChild, GetAttr, GetText} from '../options.js' */
 import { matchNode } from './match.js'
-import { parse } from 'himalaya'
 
 /**
  * Finding a node according to the given selector.
- * @param {string | Node[]} nodes - The node array to search in.
+ * @param {Node[]} nodes - The node array to search in.
  * @param {Selector} sel - The selectors defining the node wanted to be returned.
  * @returns {ModifiedENode | undefined} The found node.
  * @public
  */
 export function findNode(nodes, sel) {
-  /** @type {Node[]} */
-  const _nodes = typeof nodes === 'string' ? parse(nodes) : nodes
+  if (nodes.length === 0) return
 
-  if (!_nodes || _nodes.length === 0) return
-
-  for (let i = 0; i < _nodes.length; i++) {
-    const node = _nodes[i]
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i]
     if (node.type !== 'element') continue
 
     if (matchNode(node, sel)) return modifyNode(node)

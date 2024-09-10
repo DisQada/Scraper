@@ -1,5 +1,7 @@
 export {}
 
+/** @typedef {string} HTMLStr */
+
 /**
  * @typedef {ElementNode | TextNode | CommentNode} Node
  * @property {string} type The type of the node.
