@@ -1,5 +1,5 @@
-export { findNode } from './func/find.js'
-export { grabText, grabAttr } from './func/grab.js'
+export * from './options.js'
 
-// BUG: 'himalaya' ignores any 'type' attrs in the html tag
-// FIX: 'himalaya' adds empty array for 'attributes' and 'children' if they don't exist
+export { parse } from 'himalaya'
+export { findNode } from './func/find.js'
+export { grabAttr, grabText } from './func/grab.js'
