@@ -5,6 +5,25 @@ import { parse } from 'himalaya'
 /**
  * @param {HTMLStr | Node[]} from
  * @param {Selector} sel
+ * @returns {Node | {}}
+ */
+export function grabNode(from, sel) {
+  return findNode(getNodes(from), sel) || {}
+}
+
+/**
+ * @param {HTMLStr | Node[]} from
+ * @param {Selector} sel
+ * @param {Selector} cSel
+ * @returns {Node | {}}
+ */
+export function grabChild(from, sel, cSel) {
+  return findNode(getNodes(from), sel)?.getChild(cSel) || {}
+}
+
+/**
+ * @param {HTMLStr | Node[]} from
+ * @param {Selector} sel
  * @param {TextOptions} [options]
  * @returns {string}
  */
