@@ -1,4 +1,4 @@
-/** @import { ElementNode, Node } from '../types/options.js' */
+/** @import { ElementNode, Node } from '../src/options.js' */
 import { ok } from 'assert/strict'
 import { readFile } from 'fs/promises'
 
@@ -6,15 +6,15 @@ import { readFile } from 'fs/promises'
 const nodes = JSON.parse(await readFile('scrap.json', 'utf8'))
 
 describe('scrap', function () {
-  it('should be valid', async function () {
+  it('should be valid', function () {
     ok(nodes.every(validNode))
   })
 })
 
 /**
- * Check if a json is a valid Himalaya output
- * @param {Node} node - the json to check (a single node)
- * @returns {boolean} whether the json is a valid Himalaya output
+ * Check if a node is a valid Himalaya output
+ * @param {Node} node - the node to check
+ * @returns {boolean} whether the node is a valid Himalaya output
  */
 function validNode(node) {
   if (typeof node !== 'object' || Array.isArray(node)) return false
@@ -22,18 +22,17 @@ function validNode(node) {
   const types = ['element', 'text', 'comment']
   if (!types.includes(node.type)) return false
 
-  switch (node.type) {
-    case 'element':
-      return (
-        ['tagName', 'attributes', 'children'].every((prop) => prop in node) &&
-        Array.isArray(node.attributes) &&
-        node.attributes.every((attr) => typeof attr === 'object' && !Array.isArray(attr) && 'key' in attr) &&
-        Array.isArray(node.children) &&
-        node.children.every((child) => validNode(child))
-      )
+  if (node.type === 'text' || node.type === 'comment') return typeof node.content === 'string'
 
-    case 'text':
-    case 'comment':
-      return 'content' in node && typeof node.content === 'string'
+  if (node.type === 'element') {
+    return (
+      ['tagName', 'attributes', 'children'].every((key) => key in node) &&
+      Array.isArray(node.attributes) &&
+      node.attributes.every((a) => typeof a === 'object' && !Array.isArray(a) && 'key' in a && 'value' in a) &&
+      Array.isArray(node.children) &&
+      node.children.every((c) => validNode(c))
+    )
   }
+
+  return false
 }

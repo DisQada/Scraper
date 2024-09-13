@@ -6,25 +6,27 @@ import { grabText, grabAttr } from '../../src/func/grab.js'
 /** @type {ElementNode[]} */
 const nodes = JSON.parse(await readFile('scrap.json', 'utf8'))
 
-describe('func', function () {
-  describe('grab', function () {
-    describe('grabText()', function () {
-      it('Without options', function () {
-        const text = grabText(nodes, { tag: 'h1' })
-        equal(text, 'Hello!')
-      })
+describe('grab', function () {
+  describe('grabText()', function () {
+    /** @type {string} */ let t
 
-      it('With options.deep', function () {
-        const text = grabText(nodes, { tag: 'h1' }, { deep: true })
-        equal(text, 'Hello World!')
-      })
+    it('Without options', function () {
+      t = grabText(nodes, { tag: 'h1' })
+      equal(t, 'Hello!')
     })
 
-    describe('grabAttr()', function () {
-      it('Grab value', function () {
-        const arr = grabAttr(nodes, { tag: 'a' }, 'class')
-        equal(arr, 'one')
-      })
+    it('With options', function () {
+      t = grabText(nodes, { tag: 'h1' }, { deep: true })
+      equal(t, 'Hello World!')
+    })
+  })
+
+  describe('grabAttr()', function () {
+    /** @type {string} */ let a
+
+    it('', function () {
+      a = grabAttr(nodes, { tag: 'a' }, 'class')
+      equal(a, 'one')
     })
   })
 })
