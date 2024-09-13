@@ -10,6 +10,7 @@
     "format": "prettier . --write --ignore-path .gitignore",
     "test": "mocha ./test/**/*.test.js"
   },
+  "bin": "./bin/download.js",
   "type": "module",
   "main": "./src/exports.js",
   "types": "./types/exports.d.ts",
