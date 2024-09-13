@@ -1,103 +1,56 @@
 [
   {
-    "type": "element",
-    "tagName": "div",
-    "attributes": [
-      { "key": "class", "value": "container" },
-      { "key": "id", "value": "main" }
-    ],
+    "tag": "div",
+    "attrs": { "class": "container", "id": "main" },
     "children": [
+      { "tag": "p" },
       {
-        "type": "element",
-        "tagName": "p",
-        "attributes": [],
-        "children": []
+        "tag": "a",
+        "attrs": { "class": "one" }
       },
       {
-        "type": "element",
-        "tagName": "a",
-        "attributes": [{ "key": "class", "value": "one" }],
-        "children": []
+        "tag": "img",
+        "attrs": { "class": "two" }
       },
       {
-        "type": "element",
-        "tagName": "img",
-        "attributes": [{ "key": "class", "value": "two" }],
-        "children": []
-      },
-      {
-        "type": "element",
-        "tagName": "p",
-        "attributes": [
-          { "key": "class", "value": "three" },
-          { "key": "id", "value": "other" }
-        ],
-        "children": []
+        "tag": "p",
+        "attrs": { "class": "three", "id": "other" }
       }
     ]
   },
   {
-    "type": "element",
-    "tagName": "div",
-    "attributes": [
-      { "key": "class", "value": "container" },
-      { "key": "id", "value": "main" }
-    ],
+    "tag": "div",
+    "attrs": { "class": "container", "id": "main" },
     "children": [
       {
-        "type": "element",
-        "tagName": "canvas",
-        "attributes": [],
+        "tag": "canvas",
         "children": [
           {
-            "type": "element",
-            "tagName": "span",
-            "attributes": [],
-            "children": [{ "type": "text", "content": "Hello World!" }]
+            "tag": "span",
+            "children": ["Hello World!"]
           }
         ]
       }
     ]
   },
   {
-    "type": "element",
-    "tagName": "div",
-    "attributes": [],
+    "tag": "div",
     "children": [
       {
-        "type": "element",
-        "tagName": "p",
-        "attributes": [],
-        "children": [
-          {
-            "type": "element",
-            "tagName": "href",
-            "attributes": [],
-            "children": []
-          }
-        ]
+        "tag": "p",
+        "children": [{ "tag": "href" }]
       }
     ]
   },
   {
-    "type": "element",
-    "tagName": "h1",
-    "attributes": [],
+    "tag": "h1",
     "children": [
+      "Hello",
       {
-        "type": "text",
-        "content": "Hello"
+        "tag": "span",
+        "children": [" World"]
       },
-      {
-        "type": "element",
-        "tagName": "span",
-        "attributes": [],
-        "children": [{ "type": "text", "content": " World" }]
-      },
-      {
-        "type": "text",
-        "content": "!"
-      }
+      "!"
     ]
   }
 ]

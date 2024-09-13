@@ -46,9 +46,6 @@
   "author": "DisQada <hi@disqada.org> (https://links.disqada.org)",
   "contributors": [],
   "license": "Apache-2.0",
-  "dependencies": {
-    "himalaya": "^1.1.0"
-  },
   "devDependencies": {
     "@disqada/workspace": "^1.5.2",
     "mocha": "^10.7.3",

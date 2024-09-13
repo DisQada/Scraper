@@ -2,9 +2,9 @@
 
 import { existsSync, mkdirSync, writeFileSync, readFile } from 'fs'
 import { resolve, join } from 'path'
-import { parse } from 'himalaya'
 import { get as httpGet } from 'http'
 import { get as httpsGet } from 'https'
+import { parse } from '../src/func/parse.js'
 
 const config = {
   /** @type {string | null} */

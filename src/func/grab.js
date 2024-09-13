@@ -1,6 +1,6 @@
 /** @import { AttrKey, AttrValue, HTMLStr, Node, Selector, TextOptions } from '../options.js' */
-import { parse } from 'himalaya'
 import { findNode } from './find.js'
+import { parse } from './parse.js'
 
 /**
  * Grabs a node from the given HTML string or node array based on the selector.
@@ -51,5 +51,5 @@ export function grabText(from, sel, options) {
  * @returns {Node[]} The node array.
  */
 function getNodes(from) {
-  return typeof from === 'string' ? parse(from) : from
+  return typeof from === 'string' ? parse(from).filter((n) => typeof n === 'object') : from
 }

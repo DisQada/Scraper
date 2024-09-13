@@ -1,9 +1,9 @@
-/** @import { ElementNode } from '../../src/options.js' */
+/** @import { Node } from '../../src/options.js' */
 import { equal } from 'assert/strict'
 import { readFile } from 'fs/promises'
 import { grabText, grabAttr } from '../../src/func/grab.js'
 
-/** @type {ElementNode[]} */
+/** @type {Node[]} */
 const nodes = JSON.parse(await readFile('scrap.json', 'utf8'))
 
 describe('grab', function () {

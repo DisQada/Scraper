@@ -1,15 +1,15 @@
-/** @import { ElementNode, ModifiedENode } from '../../src/options.js' */
+/** @import { ModNode, Node } from '../../src/options.js' */
 import { ok, equal, deepEqual } from 'assert/strict'
 import { readFile } from 'fs/promises'
 import { findNode, modifyNode } from '../../src/func/find.js'
 
-/** @type {ElementNode[]} */
+/** @type {Node[]} */
 const nodes = JSON.parse(await readFile('scrap.json', 'utf8'))
 
 describe('find', function () {
   describe('findNode()', function () {
-    /** @type {ModifiedENode | undefined} */ let n
-    /** @type {ElementNode | undefined} */ let expected
+    /** @type {ModNode | undefined} */ let n
+    /** @type {Node | undefined} */ let expected
 
     it('Not found', function () {
       n = findNode(nodes, { tag: 'abbr' })
@@ -19,29 +19,17 @@ describe('find', function () {
 
     it('First match', function () {
       n = findNode(nodes, { tag: 'p' })
-      expected = { type: 'element', tagName: 'p', attributes: [], children: [] }
+      expected = { tag: 'p' }
       ok(n)
       deepEqual(clean(n), expected)
 
       n = findNode(nodes, { attr: ['class=two'] })
-      expected = { type: 'element', tagName: 'img', attributes: [{ key: 'class', value: 'two' }], children: [] }
+      expected = { tag: 'img', attrs: { class: 'two' } }
       ok(n)
       deepEqual(clean(n), expected)
 
       n = findNode(nodes, { child: { tag: 'span' } })
-      expected = {
-        type: 'element',
-        tagName: 'canvas',
-        attributes: [],
-        children: [
-          {
-            type: 'element',
-            tagName: 'span',
-            attributes: [],
-            children: [{ type: 'text', content: 'Hello World!' }]
-          }
-        ]
-      }
+      expected = { tag: 'canvas', children: [{ tag: 'span', children: ['Hello World!'] }] }
       ok(n)
       deepEqual(clean(n), expected)
     })
@@ -56,44 +44,28 @@ describe('find', function () {
         }
       })
       expected = {
-        type: 'element',
-        tagName: 'div',
-        attributes: [
-          { key: 'class', value: 'container' },
-          { key: 'id', value: 'main' }
-        ],
+        tag: 'div',
+        attrs: { class: 'container', id: 'main' },
         children: [
           {
-            type: 'element',
-            tagName: 'canvas',
-            attributes: [],
-            children: [
-              {
-                type: 'element',
-                tagName: 'span',
-                attributes: [],
-                children: [{ type: 'text', content: 'Hello World!' }]
-              }
-            ]
+            tag: 'canvas',
+            children: [{ tag: 'span', children: ['Hello World!'] }]
           }
         ]
       }
+
       ok(n)
       deepEqual(clean(n), expected)
     })
   })
 
   describe('modifyNode()', function () {
-    /** @type {ModifiedENode | undefined} */ let n
+    /** @type {ModNode | undefined} */ let n
 
     it('should add the get chain-functions', function () {
-      n = modifyNode({
-        type: 'element',
-        tagName: 'p',
-        attributes: [],
-        children: [{ type: 'text', content: 'Hello World!' }]
-      })
+      n = modifyNode({ tag: 'p', children: ['Hello World!'] })
 
+      ok(n)
       ok(n.getChild)
       ok(n.getAttr)
       ok(n.getText)
@@ -106,18 +78,11 @@ describe('find', function () {
       const c = n.getChild({ tag: 'span' })
       ok(c)
 
-      /** @type {ElementNode} */
-      const expected = {
-        type: 'element',
-        tagName: 'span',
-        attributes: [],
-        children: [{ type: 'text', content: 'Hello World!' }]
-      }
-      deepEqual(clean(c), expected)
+      deepEqual(clean(c), { tag: 'span', children: ['Hello World!'] })
     })
 
     it('node.getAttr()', function () {
-      const n = findNode(nodes, { tag: 'a' })
+      n = findNode(nodes, { tag: 'a' })
       ok(n)
 
       const a = n.getAttr('class')
@@ -125,7 +90,7 @@ describe('find', function () {
     })
 
     it('node.getText()', function () {
-      const n = findNode(nodes, { tag: 'span' })
+      n = findNode(nodes, { tag: 'span' })
       ok(n)
 
       const t = n.getText()
@@ -135,18 +100,15 @@ describe('find', function () {
 })
 
 /**
- * @param {ModifiedENode} node
- * @returns {ElementNode}
+ * @param {ModNode} node
+ * @returns {Node}
  */
 function clean(node) {
-  if (node) {
-    // @ts-expect-error
-    delete node.getChild
-    // @ts-expect-error
-    delete node.getAttr
-    // @ts-expect-error
-    delete node.getText
-  }
-
+  // @ts-expect-error
+  delete node.getChild
+  // @ts-expect-error
+  delete node.getAttr
+  // @ts-expect-error
+  delete node.getText
   return node
 }
