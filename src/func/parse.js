@@ -4,8 +4,9 @@ import { removeQuotes } from './util.js'
 const regex = /(?:[^\s"'']+|"[^"]*"|'[^']*')+/g
 
 /**
- * @param {HTMLStr} html
- * @returns {Child[]}
+ * Parses an HTML string into an array of nodes and text.
+ * @param {HTMLStr} html - The HTML string to parse.
+ * @returns {Child[]} An array of nodes and text extracted from the HTML string.
  */
 export function parse(html) {
   /** @type {Child[]} */
@@ -62,9 +63,9 @@ export function parse(html) {
 }
 
 /**
- * Parses a HTML tag and its attributes.
+ * Parses an HTML tag and its attributes.
  * @param {HTMLStr} html - The tag string to parse.
- * @returns {Node} An array of objects with tag names and their attributes.
+ * @returns {Node} An object representing the parsed tag and its attributes.
  */
 export function parseTag(html) {
   /** @type {Node} */ const node = {}

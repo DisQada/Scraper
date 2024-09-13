@@ -1,9 +1,12 @@
 export {}
 
-/** @typedef {string} HTMLStr */
-/** @typedef {string} Str */
+/**
+ * A string representing HTML content.
+ * @typedef {string} HTMLStr
+ */
 
 /**
+ * Represents a selector used to find nodes in an HTML structure.
  * @typedef {object} Selector
  * @property {HTMLTag} [tag] The tag name for the node to look for.
  * @property {AttrStr | AttrStr[]} [attr] The attributes to look for in a node.
@@ -11,10 +14,12 @@ export {}
  */
 
 /**
+ * Node with additional methods for manipulation.
  * @typedef {Node & Mods} ModNode
  */
 
 /**
+ * Additional methods for node manipulation.
  * @typedef {object} Mods
  * @property {GetChild} getChild Chain function to find a node in the children array.
  * @property {GetAttr} getAttr Chain function to get the value of an attribute.
@@ -22,10 +27,12 @@ export {}
  */
 
 /**
- * @typedef {Node | Str} Child
+ * Child node, which can be a Node or a string.
+ * @typedef {Node | string} Child
  */
 
 /**
+ * Represents an HTML node.
  * @typedef {object} Node
  * @property {HTMLTag} tag The HTML tag name.
  * @property {AttrsObj} [attrs] The attributes of the node.
@@ -33,38 +40,46 @@ export {}
  */
 
 /**
+ * Function to find a child node based on a selector.
  * @callback GetChild
  * @this {Node}
- * @param {Selector} selector
- * @returns {ModNode | undefined}
+ * @param {Selector} sel The selector to find the child node.
+ * @returns {ModNode | undefined} The found child node or undefined if not found.
  */
 
 /**
+ * Function to get the value of an attribute.
  * @callback GetAttr
  * @this {Node}
- * @param {AttrKey} key
- * @returns {AttrValue | undefined}
+ * @param {AttrKey} key The key of the attribute.
+ * @returns {AttrValue | undefined} The value of the attribute or undefined if not found.
  */
 
 /**
+ * Function to get the text content of a node.
  * @callback GetText
  * @this {Node}
- * @param {TextOptions} [options]
- * @returns {string}
+ * @param {TextOptions} [options] Options for getting the text content.
+ * @returns {string} The text content of the node.
  */
 
 /**
+ * Options for getting the text content of a node.
  * @typedef {object} TextOptions
  * @property {boolean} [deep] Whether to get the text of the children too.
  */
 
 /**
- * Node attributes only
+ * Object containing node attributes.
+ *
+ * Used for node attributes only
  * @typedef {{ [key: AttrKey]: AttrValue }} AttrsObj
  */
 
 /**
- * Selector attributes only
+ * String defining an attribute key or key-value pair.
+ *
+ * Used for selector attributes only
  * @typedef {`${AttrKey}=${string}` | AttrKey} AttrStr
  */
 
@@ -76,6 +91,7 @@ export {}
  */
 
 /**
+ * Value of an attribute.
  * @typedef {string | number | boolean | array | object} AttrValue
  */
 

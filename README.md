@@ -29,42 +29,38 @@
     - [download](#download)
       - [Arguments](#arguments)
       - [Examples](#examples)
-- [Scraper](#scraper-1)
-- [Scraper](#scraper-2)
 
 ## About
 
-This tool uses [himalaya][himalaya] under the hood for parsing the HTML string into JSON then this packages scrolls through it to find the desired information.
+This tool uses its own parsing of the HTML into JSON, then this package scrolls through it to find the desired information.
 
-Read [this](#basic-information) for more information
+Read [this](#basic-information) for more information. Or visit [this](https://disqada.github.io/Scraper) website for the API types
 
 ## License
 
-Copyright &copy; 2024 [DisQada](https://github.com/nabil-alsaiad)
+Copyright &copy; 2024 [DisQada](https://links.disqada.org)
 
-This tool is licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) License.  
+This tool is licensed under the [Apache 2.0](https://apache.org/licenses/LICENSE-2.0) License.  
 See the [LICENSE](LICENSE) file for more information.
 
 # Getting Started
 
 ## Basic information
 
-As the package [himalaya] breaks down the JSON output into nodes, this package is following the same concept (HTML tag = JSON object/node) with the main node types being:
+The package breaks down the HTML into JSON nodes, following the concept that an HTML tag is represented as a JSON object/node.
 
-- [Element node](https://disqada.github.io/Scraper/types/ElementNode): Container of the main information defining the tag like the tag name, attributes and children nodes
-- [Text node](https://disqada.github.io/Scraper/types/TextNode): Container of the text value in the HTML tag
-- [Comment node](https://disqada.github.io/Scraper/types/CommentNode):
+Each node represents an HTML tag with it's tag name, attributes and children nodes. The children nodes may contain text as string values
 
-Click on the individual node link to read further details about the type
+> Note that the parser completely ignores HTML comments `(<!--example-->)`
 
 ## Usage
 
-First and most importantly is that we need to have our HTML string ready in a variable
+First and most importantly, we need to have our HTML string ready in a variable.
 
-If you're gonna use the same HTML string for multiple uses then it's better to parse it by yourself then pass the JSON output to the functions (so the HTML string will be parsed once only), the following example shows how to
+If you're going to use the same HTML string for multiple uses, it's better to parse it yourself and then pass the JSON output to the functions (so the HTML string will be parsed only once). The following example shows how to do this:
 
 ```js
-import { parse } from 'himalaya'
+import { parse } from '@disqada/scraper'
 
 // Use another package to fetch the HTML from the web
 const html = `
@@ -107,33 +103,27 @@ const node = findNode(nodes, {
 ### A text value
 
 ```js
-import { grabAText } from '@disqada/scraper'
+import { grabText } from '@disqada/scraper'
 
-const text = grabAText(nodes, {
-  title: 'p'
+const text = grabText(nodes, {
+  tag: 'p'
 })
 
-// text = 'Test Page'
+// text = 'This is a test paragraph.'
 ```
 
 #### TextOptions
 
-The function [`grabText`](https://disqada.github.io/Scraper/functions/grabText) can be given a [`TextOptions`](https://disqada.github.io/Scraper/types/TextOptions) object that specifies some configurations for the search process, note that it's optional
+The function [`grabText`](https://disqada.github.io/Scraper/functions/grabText) can be given a [`TextOptions`](https://disqada.github.io/Scraper/types/TextOptions) object that specifies some configurations for the search process. Note that it's optional.
 
-> Click on the blue highlighted `TextOptions` to read more
+> Click on the blue highlighted `TextOptions` to read more.
 
 ### An attribute value
 
 ```js
 import { grabAttr } from '@disqada/scraper'
 
-const attr = grabAttr(
-  nodes,
-  {
-    tag: 'p'
-  },
-  'class'
-)
+const attr = grabAttr(nodes, { tag: 'p' }, 'class')
 
 // attr = 'content'
 ```
@@ -142,30 +132,24 @@ const attr = grabAttr(
 
 ### download
 
-You can download an HTML file and it's parsed json file under `scrap` folder in the root path of your project outside runtime by calling the `download` command cli
+You can download an HTML file and its parsed JSON file under the `scrap` folder in the root path of your project outside runtime by calling the `download` command CLI.
 
 #### Arguments
 
 > Note that either `--url` or `--path` must be given
 
-| Arg name | required | Column3                                                                        |
+| Arg name | required | Description                                                                    |
 | -------- | -------- | ------------------------------------------------------------------------------ |
-| `--file` | true     | Name of the downloaded html and parsed json file                               |
-| `--url`  | false    | Link of web page                                                               |
-| `--path` | false    | Path of a local html file (the html file will be copied to the `scrap` folder) |
+| `--file` | true     | Name of the downloaded HTML and parsed JSON file                               |
+| `--url`  | false    | Link of the web page                                                           |
+| `--path` | false    | Path of a local HTML file (the HTML file will be copied to the `scrap` folder) |
 
 #### Examples
 
 ```bash
-npm explore @disqada/scraper -- npm run download --url='https://example.com/sample' --file='sample'
+scraper --url='https://example.com/sample' --file='sample'
 ```
 
 ```bash
-npm explore @disqada/scraper -- npm run download --path='./samples/v1/index.html' --file='sample1'
+scraper --path='./samples/v1/index.html' --file='sample1'
 ```
-
-[himalaya]: https://www.npmjs.com/package/himalaya# Scraper
-
-# Scraper
-
-# Scraper
