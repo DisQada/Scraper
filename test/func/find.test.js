@@ -1,9 +1,10 @@
-/** @import {ElementNode, ModifiedENode} from '../../src/options.js' */
+/** @import { ElementNode, ModifiedENode } from '../../src/options.js' */
 import { ok, equal, deepEqual } from 'assert/strict'
+import { readFile } from 'fs/promises'
 import { findNode } from '../../src/func/find.js'
 
-/** @type {ElementNode[]} */ // @ts-expect-error
-const nodes = (await import('../../scrap.json', { assert: { type: 'json' } })).default
+/** @type {ElementNode[]} */
+const nodes = JSON.parse(await readFile('scrap.json', 'utf8'))
 
 describe('func', function () {
   describe('find', function () {
@@ -102,54 +103,54 @@ describe('func', function () {
           ],
           children: []
         })
+      })
 
-        it('Using child property', function () {
-          const node = findNode(nodes, {
-            tag: 'p',
-            child: { tag: 'href' }
-          })
-
-          ok(node)
-          deepEqual(clean(node), {
-            type: 'element',
-            tagName: 'p',
-            attributes: [],
-            children: [
-              {
-                type: 'element',
-                tagName: 'href',
-                attributes: [],
-                children: []
-              }
-            ]
-          })
+      it('Using child property', function () {
+        const node = findNode(nodes, {
+          tag: 'p',
+          child: { tag: 'href' }
         })
 
-        it('Using child chain function', function () {
-          const node = findNode(nodes, { tag: 'nested2' })?.getChild({ tag: 'nested3' })
+        ok(node)
+        deepEqual(clean(node), {
+          type: 'element',
+          tagName: 'p',
+          attributes: [],
+          children: [
+            {
+              type: 'element',
+              tagName: 'href',
+              attributes: [],
+              children: []
+            }
+          ]
+        })
+      })
 
-          ok(node)
-          deepEqual(clean(node), {
-            type: 'element',
-            tagName: 'nested3',
-            attributes: [],
-            children: [{ type: 'text', content: 'Hello World!' }]
-          })
+      it('Using child chain function', function () {
+        const node = findNode(nodes, { tag: 'h1' })?.getChild({ tag: 'span' })
+
+        ok(node)
+        deepEqual(clean(node), {
+          type: 'element',
+          tagName: 'span',
+          attributes: [],
+          children: [{ type: 'text', content: ' World' }]
         })
       })
     })
 
     describe('.text()', function () {
       it('Get value', function () {
-        const text = findNode(nodes, { tag: 'nested3' })?.getText()
+        const text = findNode(nodes, { tag: 'span' })?.getText()
         equal(text, 'Hello World!')
       })
     })
 
     describe('.attr()', function () {
       it('Get value', function () {
-        const attr = findNode(nodes, { tag: 'p' })?.getAttr('class')
-        equal(attr, 'three')
+        const attr = findNode(nodes, { tag: 'a' })?.getAttr('class')
+        equal(attr, 'one')
       })
     })
   })

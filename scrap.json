@@ -3,50 +3,34 @@
     "type": "element",
     "tagName": "div",
     "attributes": [
-      {
-        "key": "class",
-        "value": "container"
-      },
-      {
-        "key": "id",
-        "value": "main"
-      }
+      { "key": "class", "value": "container" },
+      { "key": "id", "value": "main" }
     ],
     "children": [
       {
         "type": "element",
+        "tagName": "p",
+        "attributes": [],
+        "children": []
+      },
+      {
+        "type": "element",
         "tagName": "a",
-        "attributes": [
-          {
-            "key": "class",
-            "value": "one"
-          }
-        ],
+        "attributes": [{ "key": "class", "value": "one" }],
         "children": []
       },
       {
         "type": "element",
         "tagName": "img",
-        "attributes": [
-          {
-            "key": "class",
-            "value": "two"
-          }
-        ],
+        "attributes": [{ "key": "class", "value": "two" }],
         "children": []
       },
       {
         "type": "element",
         "tagName": "p",
         "attributes": [
-          {
-            "key": "class",
-            "value": "three"
-          },
-          {
-            "key": "id",
-            "value": "other"
-          }
+          { "key": "class", "value": "three" },
+          { "key": "id", "value": "other" }
         ],
         "children": []
       }
@@ -54,31 +38,22 @@
   },
   {
     "type": "element",
-    "tagName": "nested0",
-    "attributes": [],
+    "tagName": "div",
+    "attributes": [
+      { "key": "class", "value": "container" },
+      { "key": "id", "value": "main" }
+    ],
     "children": [
       {
         "type": "element",
-        "tagName": "nested1",
+        "tagName": "canvas",
         "attributes": [],
         "children": [
           {
             "type": "element",
-            "tagName": "nested2",
+            "tagName": "span",
             "attributes": [],
-            "children": [
-              {
-                "type": "element",
-                "tagName": "nested3",
-                "attributes": [],
-                "children": [
-                  {
-                    "type": "text",
-                    "content": "Hello World!"
-                  }
-                ]
-              }
-            ]
+            "children": [{ "type": "text", "content": "Hello World!" }]
           }
         ]
       }
@@ -101,6 +76,27 @@
             "children": []
           }
         ]
+      }
+    ]
+  },
+  {
+    "type": "element",
+    "tagName": "h1",
+    "attributes": [],
+    "children": [
+      {
+        "type": "text",
+        "content": "Hello"
+      },
+      {
+        "type": "element",
+        "tagName": "span",
+        "attributes": [],
+        "children": [{ "type": "text", "content": " World" }]
+      },
+      {
+        "type": "text",
+        "content": "!"
       }
     ]
   }

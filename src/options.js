@@ -5,9 +5,6 @@ export {}
 /**
  * @typedef {ElementNode | TextNode | CommentNode} Node
  * @property {string} type The type of the node.
- * @property {object} [position] The position of the node.
- * @property {Position} position.start Where the node starts.
- * @property {Position} position.end Where the node ends.
  */
 
 /**
@@ -23,9 +20,9 @@ export {}
 
 /**
  * @typedef {object} ElementNode
- * @property {"element"} type The type of the node.
+ * @property {'element'} type The type of the node.
  * @property {Tag} tagName The HTML tag name.
- * @property {ObjAttr[]} attributes The attributes of the node.
+ * @property {AttrObj[]} attributes The attributes of the node.
  * @property {Node[]} children The children of the node.
  */
 
@@ -39,8 +36,8 @@ export {}
 /**
  * @callback GetAttr
  * @this {ElementNode}
- * @param {Key} key
- * @returns {string | undefined}
+ * @param {AttrKey} key
+ * @returns {AttrValue | undefined}
  */
 
 /**
@@ -52,26 +49,28 @@ export {}
 
 /**
  * @typedef {object} TextNode
- * @property {"text"} type The type of the node.
+ * @property {'text'} type The type of the node.
  * @property {string} content The text of the node.
  */
 
 /**
  * @typedef {object} CommentNode
- * @property {"comment"} type The type of the node.
+ * @property {'comment'} type The type of the node.
  * @property {string} content The text of the comment.
  */
 
 /**
  * All valid HTML tags.
- * @typedef {"div" | "span" | "a" | "h1"| "h2"| "h3"| "h4"| "h5"| "h6" | string} Tag
+ * @see https://www.w3schools.com/TAGs/
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element
+ * @typedef {"a" | "abbr" | "address" | "area" | "article" | "aside" | "audio" | "b" | "base" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "footer" | "form" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "meta" | "meter" | "nav" | "noscript" | "object" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr"} HTMLTag
  */
 
 /**
- * All valid HTML tag attribute key.
- * @see https://www.w3schools.com/TAGs/
- * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element
- * @typedef {"class" | "id" | "href" | string}  Key
+ * All valid HTML tag attribute keys.
+ * @see https://www.w3schools.com/TAGs/ref_attributes.asp
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes
+ * @typedef {'accept' | 'accept-charset' | 'accesskey' | 'action' | 'align' | 'alt' | 'async' | 'autocapitalize' | 'autocomplete' | 'autofocus' | 'autoplay' | 'background' | 'bgcolor' | 'border' | 'buffered' | 'capture' | 'challenge' | 'charset' | 'checked' | 'cite' | 'class' | 'code' | 'codebase' | 'color' | 'cols' | 'colspan' | 'content' | 'contenteditable' | 'contextmenu' | 'controls' | 'coords' | 'crossorigin' | 'csp' | 'data' | 'datetime' | 'decoding' | 'default' | 'defer' | 'dir' | 'dirname' | 'disabled' | 'download' | 'draggable' | 'enctype' | 'enterkeyhint' | 'for' | 'form' | 'formaction' | 'formenctype' | 'formmethod' | 'formnovalidate' | 'formtarget' | 'headers' | 'height' | 'hidden' | 'high' | 'href' | 'hreflang' | 'http-equiv' | 'icon' | 'id' | 'importance' | 'integrity' | 'intrinsicsize' | 'inputmode' | 'is' | 'ismap' | 'itemprop' | 'keytype' | 'kind' | 'label' | 'lang' | 'language' | 'loading' | 'list' | 'loop' | 'low' | 'manifest' | 'max' | 'maxlength' | 'minlength' | 'media' | 'method' | 'min' | 'multiple' | 'muted' | 'name' | 'novalidate' | 'open' | 'optimum' | 'pattern' | 'ping' | 'placeholder' | 'playsinline' | 'poster' | 'preload' | 'radiogroup' | 'readonly' | 'referrerpolicy' | 'rel' | 'required' | 'reversed' | 'rows' | 'rowspan' | 'sandbox' | 'scope' | 'scoped' | 'selected' | 'shape' | 'size' | 'sizes' | 'slot' | 'span' | 'spellcheck' | 'src' | 'srcdoc' | 'srclang' | 'srcset' | 'start' | 'step' | 'style' | 'summary' | 'tabindex' | 'target' | 'title' | 'translate' | 'type' | 'usemap' | 'value' | 'width' | 'wrap' | string} AttrKey
  */
 
 /**
@@ -80,25 +79,21 @@ export {}
  */
 
 /**
- * @typedef {ObjAttr | StrAttr} Attribute
+ * @typedef {AttrObj | AttrStr} Attribute
  */
 
 /**
- * @typedef {`${Key}=${string}`} StrAttr
+ * @typedef {`${AttrKey}=${AttrValue}`} AttrStr
  */
 
 /**
- * @typedef {object} ObjAttr
- * @property {Key} key The attribute name.
- * @property {string} [value] The value of the attribute.
+ * @typedef {object} AttrObj
+ * @property {AttrKey} key The attribute name.
+ * @property {AttrValue} [value] The value of the attribute.
  */
 
 /**
- * @typedef {object} Position
- * @property {number} index The position of the attribute.
- * @property {number} line The position of the attribute.
- * @property {number} column The position of the attribute.
- * @private
+ * @typedef {string | number | boolean | array | object} AttrValue
  */
 
 /**

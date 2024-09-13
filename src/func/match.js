@@ -1,51 +1,53 @@
-/** @import {Node, Attribute, ElementNode, ObjAttr, Selector} from '../options.js' */
+/** @import { Attribute, AttrObj, ElementNode, Node, Selector } from '../options.js' */
 import { removeQuotes } from './util.js'
 
 /**
- * Check that the selector exist in the node.
+ * Check if the selector matches the node.
  * @param {ElementNode} node - The node to match against the selector.
  * @param {Selector} sel - The selectors to look for in the node.
  * @returns {boolean} True if the selector exist in the node, false otherwise.
  * @private
  */
 export function matchNode(node, sel) {
+  // If sel.tag is defined and it's not equal to n.tag, then skip this node.
   if (sel.tag && sel.tag !== node.tagName) return false
 
-  if (node.attributes && sel.attr) {
+  if (sel.attr) {
     if (Array.isArray(sel.attr)) {
-      if (!attrsSubset(node.attributes, sel.attr)) return false
-    } else if (!attrExists(node.attributes, sel.attr)) return false
+      // If sel.attr is an array and it's not a subset of n.attrs, then skip this node.
+      if (!includesAttrs(node.attributes, sel.attr)) return false
+      // If sel.attr doesn't exist in n.attrs, then skip this node.
+    } else if (!includesAttr(node.attributes, sel.attr)) return false
   }
 
-  if (node.children && sel.child) {
+  if (sel.child) {
     if (Array.isArray(sel.child)) {
+      // If sel.child is an array and it's not a subset of n.children, then skip this node.
       if (!matchChildren(node.children, sel.child)) return false
+      // If sel.child is an object and it's not a subset of n.children, then skip this node.
     } else if (!matchChild(node.children, sel.child)) return false
   }
 
+  // If no condition caused a skip, then return true.
   return true
 }
 
 /**
  * Check that the `attrs` exist in the `nodeAttrs`.
- * @param {ObjAttr[]} nodeAttrs - The attributes array from a node.
- * @param {Attribute[]} attrs - The attributes to look for. (if array is empty then it'll check if `nodeAttrs` is empty too)
+ * @param {AttrObj[]} nodeAttrs - The attributes array from a node.
+ * @param {Attribute[]} selAttrs - The attributes to look for. (if array is empty then it'll check if `nodeAttrs` is empty too)
  * @returns {boolean} True if the selectorAttrs exist in the `nodeAttrs`, false otherwise.
  * @private
  */
-export function attrsSubset(nodeAttrs, attrs) {
-  if (attrs.length === 0) return true
-  if (attrs.length > nodeAttrs.length) return false
+export function includesAttrs(nodeAttrs, selAttrs) {
+  if (selAttrs.length === 0) return true
+  if (selAttrs.length > nodeAttrs.length) return false
 
-  let nodeAttrsCopy = nodeAttrs.slice()
-  let attrsCopy = toObjAttrs(attrs.slice())
+  let nAttrsCopy = nodeAttrs.slice()
+  const attrsTuples = toObjAttrs(selAttrs.slice())
 
-  for (let i = 0; i < attrsCopy.length; i++) {
-    if (attrExists(nodeAttrsCopy, attrsCopy[i])) {
-      // TODO: Remove the found attribute from the copy arrays.
-      // attrsCopy = attrsCopy.filter((a) => a.key !== attrsCopy[i].key)
-      // nodeAttrsCopy = nodeAttrsCopy.filter((a) => a.key !== attrsCopy[i].key)
-    } else return false
+  for (let i = 0; i < attrsTuples.length; i++) {
+    if (!includesAttr(nAttrsCopy, attrsTuples[i])) return false
   }
 
   return true
@@ -53,17 +55,17 @@ export function attrsSubset(nodeAttrs, attrs) {
 
 /**
  * Check that the nodeAttrs has at least one attribute equal to the selectorAttr.
- * @param {ObjAttr[]} nodeAttrs - The attributes array from a node.
- * @param {Attribute} attr - The attribute to look for.
+ * @param {AttrObj[]} nodeAttrs - The attributes array from a node.
+ * @param {Attribute} selAttr - The attribute to look for.
  * @returns {boolean} True if the nodeAttrs has at least one attribute equal to the selectorAttr, false otherwise.
  * @private
  */
-export function attrExists(nodeAttrs, attr) {
-  attr = toObjAttr(attr)
+export function includesAttr(nodeAttrs, selAttr) {
+  selAttr = /** @type {AttrObj} */ (toObjAttr(selAttr))
 
   for (let i = 0; i < nodeAttrs.length; i++) {
-    const nodeAttr = nodeAttrs[i]
-    if (attr.key === nodeAttr.key && (attr.value === undefined || attr.value === nodeAttr.value)) return true
+    const { key, value } = nodeAttrs[i]
+    if (selAttr.key === key && (selAttr.value === undefined || selAttr.value === value)) return true
   }
 
   return false
@@ -71,23 +73,20 @@ export function attrExists(nodeAttrs, attr) {
 
 /**
  * @param {Attribute[]} attrs
- * @returns {ObjAttr[]}
+ * @returns {AttrObj[]}
  */
 export function toObjAttrs(attrs) {
-  for (let i = 0; i < attrs.length; i++) {
-    attrs[i] = toObjAttr(attrs[i])
-  }
-
+  for (let i = 0; i < attrs.length; i++) attrs[i] = toObjAttr(attrs[i])
   // @ts-expect-error
   return attrs
 }
 
 /**
  * @param {Attribute} attr
- * @returns {ObjAttr}
+ * @returns {AttrObj}
  */
 export function toObjAttr(attr) {
-  if (typeof attr !== 'string') return attr
+  if (typeof attr === 'object') return attr
 
   let [key, value] = attr.split('=')
   if (value) value = removeQuotes(value)
@@ -96,17 +95,18 @@ export function toObjAttr(attr) {
 
 /**
  * Check that the `attrs` exist in the `nodeAttrs`.
- * @param {Node[]} nodes - The attributes array from a node.
- * @param {Selector[]} selectors - The attributes to look for. (if array is empty then it'll check if `nodeChildren` is empty too)
+ * @param {Node[]} children - The attributes array from a node.
+ * @param {Selector[]} selArr - The attributes to look for. (if array is empty then it'll check if `nodeChildren` is empty too)
  * @returns {boolean} True if the selectorAttrs exist in the `nodeAttrs`, false otherwise.
  * @private
  */
-export function matchChildren(nodes, selectors) {
-  if (selectors.length === 0) return true
-  if (selectors.length > nodes.length) return false
+export function matchChildren(children, selArr) {
+  if (selArr.length === 0) return true
+  if (selArr.length > children.length) return false
 
-  for (let i = 0; i < selectors.length; i++) {
-    if (!matchChild(nodes, selectors[i])) return false
+  for (let i = 0; i < selArr.length; i++) {
+    // If one child doesn't match, then return false.
+    if (!matchChild(children, selArr[i])) return false
   }
 
   return true
@@ -114,32 +114,17 @@ export function matchChildren(nodes, selectors) {
 
 /**
  * Check that the nodeAttrs has at least one attribute equal to the selectorAttr.
- * @param {Node[]} nodes - The attributes array from a node.
+ * @param {Node[]} children - The attributes array from a node.
  * @param {Selector} sel - The attribute to look for.
  * @returns {boolean} True if the nodeAttrs has at least one attribute equal to the selectorAttr, false otherwise.
  * @private
  */
-export function matchChild(nodes, sel) {
-  for (let i = 0; i < nodes.length; i++) {
-    const node = nodes[i]
-
-    if (node.type !== 'element') continue
-
-    if (sel.tag && sel.tag !== node.tagName) continue
-
-    if (node.attributes && sel.attr) {
-      if (Array.isArray(sel.attr)) {
-        if (!attrsSubset(node.attributes, sel.attr)) continue
-      } else if (!attrExists(node.attributes, sel.attr)) continue
-    }
-
-    if (node.children && sel.child) {
-      if (Array.isArray(sel.child)) {
-        if (!matchChildren(node.children, sel.child)) continue
-      } else if (!matchChild(node.children, sel.child)) continue
-    }
-
-    return true
+export function matchChild(children, sel) {
+  for (let i = 0; i < children.length; i++) {
+    const c = children[i]
+    // If n is a text child, then skip it.
+    if (c.type !== 'element') continue
+    if (matchNode(c, sel)) return true
   }
 
   return false
