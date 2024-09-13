@@ -5,13 +5,13 @@
   "description": "Very simple and easy to use web scraper",
   "scripts": {
     "download": "node ./bin/download.js",
-    "types": "workspace ./workspace.json -t",
-    "docs": "workspace ./workspace.json -t -d",
+    "types": "workspace ./workspace.json -c -t",
+    "docs": "workspace ./workspace.json -c -t -d",
     "format": "prettier . --write --ignore-path .gitignore",
     "test": "mocha ./test/**/*.test.js"
   },
-  "bin": "./bin/download.js",
   "type": "module",
+  "bin": "./bin/download.js",
   "main": "./src/exports.js",
   "types": "./types/exports.d.ts",
   "exports": {
@@ -29,10 +29,7 @@
     "*.md"
   ],
   "homepage": "https://disqada.github.io/Scraper",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/DisQada/Scraper.git"
-  },
+  "repository": "github:DisQada/Scraper",
   "bugs": {
     "url": "https://github.com/DisQada/Scraper/issues"
   },
@@ -48,7 +45,7 @@
   "contributors": [],
   "license": "Apache-2.0",
   "devDependencies": {
-    "@disqada/workspace": "^1.5.2",
+    "@disqada/workspace": "^1.6.1",
     "mocha": "^10.7.3",
     "prettier": "^3.3.3"
   }
