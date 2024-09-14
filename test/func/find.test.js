@@ -100,15 +100,12 @@ describe('find', function () {
 })
 
 /**
- * @param {ModNode} node
+ * @param {Partial<ModNode>} node
  * @returns {Node}
  */
 function clean(node) {
-  // @ts-expect-error
   delete node.getChild
-  // @ts-expect-error
   delete node.getAttr
-  // @ts-expect-error
   delete node.getText
-  return node
+  return /** @type {Node} */ (node)
 }

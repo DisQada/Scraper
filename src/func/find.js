@@ -30,15 +30,11 @@ export function findNode(nodes, sel) {
  * @private
  */
 export function modifyNode(node) {
-  // @ts-expect-error
-  node.getChild = getChild.bind(node)
-  // @ts-expect-error
-  node.getAttr = getAttr.bind(node)
-  // @ts-expect-error
-  node.getText = getText.bind(node)
-
-  // @ts-expect-error
-  return node
+  const n = /** @type {ModNode} */ (node)
+  n.getChild = getChild.bind(n)
+  n.getAttr = getAttr.bind(n)
+  n.getText = getText.bind(n)
+  return n
 }
 
 /** @type {GetChild} */

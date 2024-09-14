@@ -69,7 +69,7 @@ export function includesAttrs(nodeAttrs, selAttrs) {
  * @private
  */
 export function includesAttr(nodeAttrs, selAttr) {
-  /** @type {[string, string|undefined]} */ // @ts-expect-error
+  /** @type {[string, string | undefined]} */ // @ts-expect-error
   let [key, value] = selAttr.split('=')
   if (value === undefined) return key in nodeAttrs
 
