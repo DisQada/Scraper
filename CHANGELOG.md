@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/DisQada/Scraper/compare/v2.0.0...v2.0.1) (2024-09-14)
+
+
+### Bug Fixes
+
+* إنتاج الأنواع قبل نشر الطرد ([ab22b77](https://github.com/DisQada/Scraper/commit/ab22b773a781334bf746836b6ecc6f6739b74ef7))
+
 # [2.0.0](https://github.com/DisQada/Scraper/compare/v1.0.0...v2.0.0) (2024-09-13)
 
 
