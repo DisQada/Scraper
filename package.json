@@ -4,9 +4,6 @@
   "version": "2.0.1",
   "description": "Very simple and easy to use web scraper",
   "scripts": {
-    "prepack": "npm run types && npm run format",
-    "types": "workspace ./workspace.json -c -t",
-    "docs": "workspace ./workspace.json -c -t -d",
     "format": "prettier . --write --ignore-path .gitignore",
     "test": "mocha ./test/**/*.test.js"
   },
@@ -45,8 +42,11 @@
   "contributors": [],
   "license": "Apache-2.0",
   "devDependencies": {
-    "@disqada/workspace": "^1.6.1",
+    "@disqada/workspace": "^1.6.2",
     "mocha": "^10.7.3",
     "prettier": "^3.3.3"
+  },
+  "dependencies": {
+    "himalaya": "^1.1.0"
   }
 }

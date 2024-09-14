@@ -1,156 +1,93 @@
-/** @import { AttrKey, AttrsObj, AttrValue, HTMLStr, HTMLTag, Node, Child } from '../options.js' */
-import { removeQuotes } from './util.js'
-
-const regex = /(?:[^\s"'']+|"[^"]*"|'[^']*')+/g
+/** @import { HTMLStr, Node, Child, AttrValue } from '../options.js' */
+import { parse as himalaya } from 'himalaya'
 
 /**
  * Parses an HTML string into an array of nodes and text.
+ *
+ * Using the `himalaya` package to parse the HTML string into an array of nodes and text.
  * @param {HTMLStr} html - The HTML string to parse.
  * @returns {Child[]} An array of nodes and text extracted from the HTML string.
  */
 export function parse(html) {
+  /** @type {HNode[]} */
+  const hNodes = himalaya(html)
+
   /** @type {Child[]} */
-  const nodes = []
-  let char
-  let start = 0
-  let depth = 0
-  let comment = -1
-
-  for (let i = 0; i < html.length; i++) {
-    char = html[i]
-
-    if (comment !== -1) {
-      if (char === '-' && html[i + 1] === '-' && html[i + 2] === '>') {
-        html = html.slice(0, comment) + html.slice(i + 3)
-
-        i = comment - 1
-        comment = -1
-      }
-      continue
-    }
-
-    if (char === '<') {
-      if (html[i + 1] === '!') {
-        comment = i
-        continue
-      }
-
-      if (depth === 0 && i > 0) {
-        const text = html.slice(start, i)
-        start = i
-
-        if (text !== '') nodes.push(text)
-      }
-
-      const nextChar = html[i + 1]
-      if (nextChar !== '/') depth++
-      if (nextChar === '/') depth--
-    } else if (char === '>') {
-      if (html[i - 1] === '/') depth--
-
-      if (depth === 0) {
-        const tag = html.slice(start, i + 1)
-        start = i + 1
-
-        const node = parseTag(tag)
-        nodes.push(node)
-      }
-    }
-  }
-  if (start !== html.length) nodes.push(html.slice(start))
-
+  const nodes = removeComments(hNodes).map(fixNode)
   return nodes
 }
 
 /**
- * Parses an HTML tag and its attributes.
- * @param {HTMLStr} html - The tag string to parse.
- * @returns {Node} An object representing the parsed tag and its attributes.
+ * @param {ElementNode | TextNode} el
+ * @returns {Child}
  */
-export function parseTag(html) {
-  /** @type {Node} */ const node = {}
+export function fixNode(el) {
+  if (el.type === 'text') return el.content
 
-  if (html.endsWith('/>')) html = html.slice(1, -2).trim()
-  else if (html.endsWith('>')) html = html.slice(1, -1).trim()
+  /** @type {Node} */ // @ts-expect-error
+  const n = { tag: el.tagName }
 
-  const spaceI = html.indexOf(' ')
-  const endI = html.indexOf('>')
-  const startI = html.lastIndexOf('</')
+  if (el.attributes.length > 0) {
+    n.attrs = {}
 
-  const hasSpace = spaceI !== -1
-  const hasCloseTag = endI !== -1 && startI !== -1
-
-  const hasAttrs = hasSpace && (!hasCloseTag || (hasCloseTag && spaceI < endI))
-  if (hasAttrs) {
-    const attrsStr = html.slice(spaceI, endI !== -1 ? endI : html.length).trim()
-    const attrs = parseAttrs(attrsStr)
-
-    if (attrs) node.attrs = attrs
-    html = html.replace(attrsStr, '').trim()
-  }
-
-  if (hasCloseTag) {
-    /** @type {HTMLTag} */ // @ts-expect-error
-    const tagName = html.slice(0, endI).trim()
-    node.tag = tagName
-
-    const inner = html.slice(endI + 1, startI)
-    if (inner !== '') {
-      const children = parse(inner)
-      if (children.length > 0) node.children = children
+    for (let i = 0; i < el.attributes.length; i++) {
+      const { key, value } = el.attributes[i]
+      n.attrs[key] = parseValue(value)
     }
-  } else {
-    /** @type {HTMLTag} */ // @ts-expect-error
-    const tag = html.slice(0)
-    node.tag = tag
   }
 
-  return node
+  if (el.children.length > 0) {
+    n.children = removeComments(el.children).map(fixNode)
+  }
+
+  return n
 }
 
 /**
- * Parses attributes from a string.
- * @param {HTMLStr} html - The HTML text containing attributes.
- * @returns {AttrsObj | undefined} An object representing the parsed attributes.
+ * Merges adjacent text nodes in an array of nodes.
+ * @param {HNode[]} nodes - The array of nodes to process.
+ * @returns {HNode2[]} The processed array with merged text nodes.
  */
-export function parseAttrs(html) {
-  html = html.trim()
-  if (html === '') return undefined
+function removeComments(nodes) {
+  /** @type {HNode2[]} */
+  const newNodes = []
 
-  html = html.replace(/\s*=\s*/g, '=')
+  for (let i = 0; i < nodes.length; i++) {
+    const n = nodes[i]
 
-  /** @type {AttrsObj} */
-  const obj = {}
-  const ans = html.match(regex)?.map((s) => s.replace(/["']/g, '')) || html
+    if (n.type === 'text') newNodes.push(n)
+    else if (n.type === 'comment') {
+      if (newNodes.length === 0) continue
 
-  for (const attr of ans) {
-    const [key, value] = parseAttr(attr)
-    obj[key] = value
+      const prev = newNodes[newNodes.length - 1]
+      const next = nodes[i + 1]
+
+      if (prev.type === 'text' && next.type === 'text') {
+        // Merge with the previous text node
+        prev.content += next.content
+        newNodes[newNodes.length - 1] = prev
+        i++ // Skip the next text node
+      }
+    } else if (n.type === 'element') {
+      if (n.children.length > 0) n.children = removeComments(n.children) // Recursively process children
+      newNodes.push(n)
+    }
   }
 
-  return obj
+  return newNodes
 }
 
 /**
- * Parses a single attribute from a string.
- * @param {HTMLStr} html - The HTML text containing the attribute.
- * @returns {[AttrKey, AttrValue]} An array with the attribute name and value.
+ * Parses a single attribute value from a string.
+ * @param {string} value
+ * @returns {AttrValue}
  */
-export function parseAttr(html) {
-  html = html.trim()
-  const equalIndex = html.indexOf('=')
-  if (equalIndex === -1) return [html, true]
-
-  let key = html.slice(0, equalIndex).trim()
-  let value = html.slice(equalIndex + 1).trim()
-
-  value = removeQuotes(value)
-
-  if (value === 'true') return [key, true]
-  if (value === 'false') return [key, false]
+export function parseValue(value) {
+  if (value === 'true' || value === null) return true
+  if (value === 'false') return false
 
   const num = Number(value)
-  if (!isNaN(num)) return [key, num]
+  if (!isNaN(num)) return num
 
   if (value.includes(':')) {
     const obj = {}
@@ -159,10 +96,43 @@ export function parseAttr(html) {
       const [k, v] = pair.split(':')
       obj[k.trim()] = v.trim()
     }
-    return [key, obj]
+    return obj
   }
 
-  if (value.includes(' ')) return [key, value.split(' ')]
+  if (value.includes(' ')) return value.split(' ').map((v) => (v.endsWith(',') ? v.slice(0, -1) : v))
 
-  return [key, value]
+  return value
 }
+
+/**
+ * @private
+ * @typedef {ElementNode | TextNode} HNode2
+ */
+
+/**
+ * @private
+ * @typedef {ElementNode | TextNode | CommentNode} HNode
+ */
+
+/**
+ * @private
+ * @typedef {object} ElementNode
+ * @property {'element'} type
+ * @property {string} tagName
+ * @property {HNode[]} children
+ * @property {{key:string, value:string}[]} attributes
+ */
+
+/**
+ * @private
+ * @typedef {object} TextNode
+ * @property {'text'} type
+ * @property {string} content
+ */
+
+/**
+ * @private
+ * @typedef {object} CommentNode
+ * @property {'comment'} type
+ * @property {string} content
+ */
