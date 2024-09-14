@@ -56,10 +56,17 @@ async function writeIt(html, withHtml = false) {
   const json = JSON.stringify(parse(html), null, 2)
   const filePath = join(folderPath, file)
 
-  // @ts-expect-error
-  const promises = [writeFile(filePath + '.json', json, encoding)]
-  // @ts-expect-error
-  if (withHtml) promises.push(writeFile(filePath + '.html', html, encoding))
+  const promises = [
+    writeFile(filePath + '.json', json, encoding, (err) => {
+      if (err) throw err
+    })
+  ]
+  if (withHtml)
+    promises.push(
+      writeFile(filePath + '.html', html, encoding, (err) => {
+        if (err) throw err
+      })
+    )
   await Promise.all(promises)
 }
 
