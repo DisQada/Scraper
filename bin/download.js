@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import { existsSync, mkdirSync, readFile, writeFile } from 'fs'
+import { existsSync, mkdirSync } from 'fs'
+import { readFile, writeFile } from 'fs/promises'
 import { get as httpsGet } from 'https'
 import { get as httpGet } from 'http'
 import { join, resolve } from 'path'
@@ -36,10 +37,8 @@ if (url) {
   })
 } else if (path) {
   const filePath = resolve(path)
-  readFile(filePath, encoding, (err, html) => {
-    if (err) throw err
-    writeIt(html)
-  })
+  const html = await readFile(filePath, encoding)
+  writeIt(html)
 }
 
 /**
@@ -56,17 +55,8 @@ async function writeIt(html, withHtml = false) {
   const json = JSON.stringify(parse(html), null, 2)
   const filePath = join(folderPath, file)
 
-  const promises = [
-    writeFile(filePath + '.json', json, encoding, (err) => {
-      if (err) throw err
-    })
-  ]
-  if (withHtml)
-    promises.push(
-      writeFile(filePath + '.html', html, encoding, (err) => {
-        if (err) throw err
-      })
-    )
+  const promises = [writeFile(filePath + '.json', json, encoding)]
+  if (withHtml) promises.push(writeFile(filePath + '.html', html, encoding))
   await Promise.all(promises)
 }
 
