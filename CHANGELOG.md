@@ -1,3 +1,12 @@
+## [2.0.2](https://github.com/DisQada/Scraper/compare/v2.0.1...v2.0.2) (2024-09-14)
+
+
+### Bug Fixes
+
+* إرجاع طرد himalaya مؤقتاً ([7926c34](https://github.com/DisQada/Scraper/commit/7926c349e6dbc38ee253e5fdfcc1ac9d26e30267))
+* إصلاح أوامر كتابة الملفات ([75939dd](https://github.com/DisQada/Scraper/commit/75939dd2182c2dab80a3d6e076d88c9e8009a341))
+* إصلاح ملف الأوامر البرمجية ([73a44e3](https://github.com/DisQada/Scraper/commit/73a44e39f96d0e850ddccaddeb84f65649869122))
+
 ## [2.0.1](https://github.com/DisQada/Scraper/compare/v2.0.0...v2.0.1) (2024-09-14)
 
 
