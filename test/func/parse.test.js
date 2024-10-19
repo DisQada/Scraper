@@ -1,4 +1,4 @@
-import { ok, deepEqual } from 'assert/strict'
+import { deepEqual } from 'assert/strict'
 import { parse, fixNode } from '../../src/func/parse.js'
 
 describe('parse', function () {
@@ -146,9 +146,32 @@ describe('parse', function () {
       })
       deepEqual(n, {
         tag: 'div',
-        attrs: { class: 'container' },
+        attrs: { class: ['container'] },
         children: ['Hello World']
       })
+    })
+
+    it('should not missup urls in attributes', function () {
+      const n = fixNode({
+        type: 'element',
+        tagName: 'a',
+        attributes: [{ key: 'href', value: 'https://examp.le' }],
+        children: []
+      })
+      deepEqual(n, {
+        tag: 'a',
+        attrs: { href: 'https://examp.le' }
+      })
+    })
+
+    it('should erase style attributes', function () {
+      const n = fixNode({
+        type: 'element',
+        tagName: 'p',
+        attributes: [{ key: 'style', value: 'max-width: 100%' }],
+        children: []
+      })
+      deepEqual(n, { tag: 'p' })
     })
   })
 })

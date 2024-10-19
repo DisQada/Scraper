@@ -1,4 +1,4 @@
-/** @import { HTMLStr, Node, Child, AttrValue } from '../options.js' */
+/** @import { HTMLStr, Node, Child, AttrValue, AttrKey } from '../options.js' */
 import { parse as himalaya } from 'himalaya'
 
 /**
@@ -28,12 +28,16 @@ export function fixNode(el) {
   const n = { tag: el.tagName }
 
   if (el.attributes.length > 0) {
-    n.attrs = {}
+    const attrs = {}
 
     for (let i = 0; i < el.attributes.length; i++) {
       const { key, value } = el.attributes[i]
-      n.attrs[key] = parseValue(value)
+      if (key === 'style') continue
+
+      attrs[key] = parseValue(key, value)
     }
+
+    if (Object.keys(attrs).length > 0) n.attrs = attrs
   }
 
   if (el.children.length > 0) {
@@ -79,27 +83,20 @@ function removeComments(nodes) {
 
 /**
  * Parses a single attribute value from a string.
+ * @param {AttrKey} key
  * @param {string} value
  * @returns {AttrValue}
  */
-export function parseValue(value) {
+export function parseValue(key, value) {
   if (value === 'true' || value === null) return true
   if (value === 'false') return false
 
   const num = Number(value)
   if (!isNaN(num)) return num
 
-  if (value.includes(':')) {
-    const obj = {}
-    const pairs = value.split(';')
-    for (const pair of pairs) {
-      const [k, v] = pair.split(':')
-      obj[k.trim()] = v.trim()
-    }
-    return obj
-  }
-
-  if (value.includes(' ')) return value.split(' ').map((v) => (v.endsWith(',') ? v.slice(0, -1) : v))
+  if (['class', 'rel', 'headers', 'autocomplete', 'sandbox', 'ping'].some((x) => key === x)) return value.split(' ')
+  if (value.includes('=') && ['srcset', 'accept', 'content'].some((x) => key === x))
+    return value.split(',').map((v) => v.trim())
 
   return value
 }
