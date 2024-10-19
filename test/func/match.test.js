@@ -1,6 +1,13 @@
-/** @import { AttrsObj, AttrStr, AttrTuple, Child, Node, Selector } from '../../src/options.js' */
+/** @import { AttrsObj, AttrStr, Child, Node, Selector } from '../../src/options.js' */
 import { ok } from 'assert/strict'
-import { matchNode, matchChildren, matchChild, includesAttrs, includesAttr } from '../../src/func/match.js'
+import {
+  matchNode,
+  matchChildren,
+  matchChild,
+  includesAttrsObj,
+  includesAttrs,
+  includesAttr
+} from '../../src/func/match.js'
 
 describe('match', function () {
   describe('includesAttr()', function () {
@@ -43,6 +50,9 @@ describe('match', function () {
     })
 
     it('Empty nodes object', function () {
+      nAttrs = {}
+      ok(includesAttrs(nAttrs, []))
+
       nAttrs = { class: 'yes' }
       ok(includesAttrs(nAttrs, []))
 
@@ -53,6 +63,40 @@ describe('match', function () {
     it("Match isn't enough", function () {
       nAttrs = { class: 'yes' }
       ok(!includesAttrs(nAttrs, ['class=yes', 'id=no']))
+    })
+  })
+
+  describe('includesAttrsObj()', function () {
+    /** @type {AttrsObj} */ let nAttrs
+
+    it('With value', function () {
+      nAttrs = { class: 'yes' }
+      ok(includesAttrsObj(nAttrs, { class: 'yes' }))
+      ok(!includesAttrsObj(nAttrs, { class: 'no' }))
+      ok(!includesAttrsObj(nAttrs, { clazz: 'yes' }))
+      ok(!includesAttrsObj(nAttrs, { class: 'yes', clazz: 'no' }))
+    })
+
+    it('Without value', function () {
+      nAttrs = { href: 'https://example.com' }
+      ok(includesAttrsObj(nAttrs, { href: undefined }))
+      ok(!includesAttrsObj(nAttrs, { a: undefined }))
+    })
+
+    it('Empty nodes object', function () {
+      nAttrs = {}
+      ok(includesAttrsObj(nAttrs, {}))
+
+      nAttrs = { class: 'yes' }
+      ok(includesAttrsObj(nAttrs, {}))
+
+      nAttrs = {}
+      ok(!includesAttrsObj(nAttrs, { class: undefined }))
+    })
+
+    it("Match isn't enough", function () {
+      nAttrs = { class: 'yes' }
+      ok(!includesAttrsObj(nAttrs, { class: 'yes', id: 'no' }))
     })
   })
 

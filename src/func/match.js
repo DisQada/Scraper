@@ -16,9 +16,12 @@ export function matchNode(node, sel) {
     // If node.attrs doesn't exist but sel.attr does, then this node doesn't match.
     if (!node.attrs) return false
 
-    if (Array.isArray(sel.attr)) {
-      // If sel.attr is an array and it's not a subset of n.attrs, then skip this node.
-      if (!includesAttrs(node.attrs, sel.attr)) return false
+    if (typeof sel.attr === 'object') {
+      if (Array.isArray(sel.attr)) {
+        // If sel.attr is an array and it's not a subset of n.attrs, then skip this node.
+        if (!includesAttrs(node.attrs, sel.attr)) return false
+        // If sel.attr is an object and it's not a subset of n.attrs, then skip this node.
+      } else if (!includesAttrsObj(node.attrs, sel.attr)) return false
       // If sel.attr doesn't exist in n.attrs, then skip this node.
     } else if (!includesAttr(node.attrs, sel.attr)) return false
   }
@@ -41,21 +44,41 @@ export function matchNode(node, sel) {
 /**
  * Check that the `attrs` exist in the `nodeAttrs`.
  * @param {AttrsObj} nodeAttrs - The attributes array from a node.
+ * @param {AttrsObj} selAttrs - The attributes to look for. (if array is empty then it'll check if `nodeAttrs` is empty too)
+ * @returns {boolean} True if the selectorAttrs exist in the `nodeAttrs`, false otherwise.
+ * @private
+ */
+export function includesAttrsObj(nodeAttrs, selAttrs) {
+  const nLen = Object.keys(nodeAttrs).length
+  const sLen = Object.keys(selAttrs).length
+
+  if (sLen === 0) return true
+  if (nLen === 0 && sLen > nLen) return false
+
+  for (const key in selAttrs) {
+    if (!(key in nodeAttrs)) return false
+    if (selAttrs[key] !== undefined && selAttrs[key] !== nodeAttrs[key]) return false
+  }
+
+  return true
+}
+
+/**
+ * Check that the `attrs` exist in the `nodeAttrs`.
+ * @param {AttrsObj} nodeAttrs - The attributes array from a node.
  * @param {AttrStr[]} selAttrs - The attributes to look for. (if array is empty then it'll check if `nodeAttrs` is empty too)
  * @returns {boolean} True if the selectorAttrs exist in the `nodeAttrs`, false otherwise.
  * @private
  */
 export function includesAttrs(nodeAttrs, selAttrs) {
-  const len = Object.keys(nodeAttrs).length
+  const nLen = Object.keys(nodeAttrs).length
+  const sLen = selAttrs.length
 
-  if (selAttrs.length === 0) return true
-  if (len === 0 || selAttrs.length > len) return false
+  if (sLen === 0) return true
+  if (nLen === 0 && sLen > nLen) return false
 
-  let nAttrs = { ...nodeAttrs }
-  const sAttrs = [...selAttrs]
-
-  for (let i = 0; i < sAttrs.length; i++) {
-    if (!includesAttr(nAttrs, sAttrs[i])) return false
+  for (let i = 0; i < sLen; i++) {
+    if (!includesAttr(nodeAttrs, selAttrs[i])) return false
   }
 
   return true

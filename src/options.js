@@ -9,7 +9,7 @@ export {}
  * Represents a selector used to find nodes in an HTML structure.
  * @typedef {object} Selector
  * @property {HTMLTag} [tag] The tag name for the node to look for.
- * @property {AttrStr | AttrStr[]} [attr] The attributes to look for in a node.
+ * @property {AttrStr | AttrStr[] | AttrsObj} [attr] The attributes to look for in a node.
  * @property {Selector | Selector[]} [child] The child nodes to look for in a node.
  */
 
