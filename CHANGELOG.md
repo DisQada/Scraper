@@ -1,3 +1,13 @@
+## [2.0.3](https://github.com/DisQada/Scraper/compare/v2.0.2...v2.0.3) (2024-10-19)
+
+### Features
+
+* إضافة إمكانية مقارنة الصفات بكائن ([378d7dd](https://github.com/DisQada/Scraper/commit/378d7dd90a89df2046bea2fff1f21047b5f66820))
+
+### Bug Fixes
+
+* إصلاح منطق تحليل قيم الصفات ([be49876](https://github.com/DisQada/Scraper/commit/be498766af968ee71fefb2c6b1ab2c9c65b6ef69))
+
 ## [2.0.2](https://github.com/DisQada/Scraper/compare/v2.0.1...v2.0.2) (2024-09-14)
 
 
